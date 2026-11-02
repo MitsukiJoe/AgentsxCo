@@ -1,0 +1,151 @@
+{
+  "$schema": "https://agentsxco.com/schemas/company.v1.json",
+  "companyName": "Agents x Company Default Studio",
+  "domain": "agentsxco.com",
+  "version": "1.0.0",
+  "chiefSecretary": {
+    "seatId": "chief-secretary",
+    "displayName": "助手 (总秘书)",
+    "persona": "冷静干练、条理极强的首席幕僚。擅长将老板的一句话需求扩充为可执行规范，严格执行『分步闸门扣留（做完第一步再放第二步）』，对意见收集员的情报做二次价值过滤并附带 A/B/C 可选方案上报，对各项目群产出做最终收口把关。",
+    "defaultModel": "openai/gpt-6.1-sol",
+    "fallbackModels": [
+      "anthropic/claude-opus-5-5",
+      "xai/grok-4.7"
+    ],
+    "thinking": "xhigh",
+    "inheritGlobalAgentsMd": true,
+    "allowTaskModelOverride": true,
+    "dispatchScope": "company_all",
+    "permissions": [
+      "read",
+      "dispatch_all",
+      "stage_gate_hold",
+      "final_acceptance"
+    ]
+  },
+  "departments": [
+    {
+      "roomId": "design-prototype",
+      "title": "设计原型",
+      "interactionStyle": "hybrid",
+      "worktreeStrategy": "shared_single_writer",
+      "members": [
+        "ia-designer",
+        "visual-designer",
+        "proto-engineer",
+        "design-critic"
+      ]
+    },
+    {
+      "roomId": "issue-triage",
+      "title": "Issue分诊台",
+      "interactionStyle": "mention_driven",
+      "worktreeStrategy": "shared_single_writer",
+      "members": [
+        "feedback-collector",
+        "design-critic"
+      ]
+    }
+  ],
+  "employees": [
+    {
+      "seatId": "ia-designer",
+      "department": "原型设计师",
+      "displayName": "交互设计",
+      "persona": "专注页面树、路由状态表（空态/加载/失败/离线/键盘弹起态）与异常点击路径设计，输出高密度结构化 Markdown 规范。",
+      "defaultModel": "openai/gpt-6.1-sol",
+      "fallbackModels": [
+        "deepseek/deepseek-v4-flash"
+      ],
+      "thinking": "xhigh",
+      "inheritGlobalAgentsMd": false,
+      "roleRulesPath": "rules/ia-designer.md",
+      "allowTaskModelOverride": true,
+      "dispatchScope": "peer_assist",
+      "allowedPeers": [
+        "visual-designer",
+        "proto-engineer",
+        "design-critic"
+      ]
+    },
+    {
+      "seatId": "visual-designer",
+      "department": "原型设计师",
+      "displayName": "视觉设计",
+      "persona": "负责色彩 Token、深浅双主题对比度核算（WCAG AA/AAA）、字体层级与原创品牌图标规范。",
+      "defaultModel": "anthropic/claude-opus-5-5",
+      "fallbackModels": [
+        "deepseek/deepseek-v4-flash"
+      ],
+      "thinking": "max",
+      "inheritGlobalAgentsMd": false,
+      "roleRulesPath": "rules/visual-designer.md",
+      "allowTaskModelOverride": true,
+      "dispatchScope": "peer_assist",
+      "allowedPeers": [
+        "ia-designer",
+        "proto-engineer",
+        "design-critic"
+      ]
+    },
+    {
+      "seatId": "proto-engineer",
+      "department": "原型设计师",
+      "displayName": "原型工程",
+      "persona": "全栈原型实现工程师，依据交互与视觉规范编写可本地点通的 HTML/CSS/JS 双端 Demo 并带模拟状态调试面板。",
+      "defaultModel": "openai/gpt-6.1-sol",
+      "fallbackModels": [
+        "xai/grok-4.7"
+      ],
+      "thinking": "xhigh",
+      "inheritGlobalAgentsMd": false,
+      "roleRulesPath": "rules/proto-engineer.md",
+      "allowTaskModelOverride": true,
+      "dispatchScope": "peer_assist",
+      "allowedPeers": [
+        "ia-designer",
+        "visual-designer",
+        "design-critic"
+      ]
+    },
+    {
+      "seatId": "design-critic",
+      "department": "项目监督审核",
+      "displayName": "设计质疑",
+      "persona": "眼里不揉沙子的专职预审与挑刺守门员。专门核查交互与视觉规范冲突、静态截图难辨识图标、对比度不达标与漏掉的异常边界，签发 CONDITIONAL / PASS。",
+      "defaultModel": "xai/grok-4.7",
+      "fallbackModels": [
+        "openai/gpt-6.1-sol"
+      ],
+      "thinking": "xhigh",
+      "inheritGlobalAgentsMd": false,
+      "roleRulesPath": "rules/design-critic.md",
+      "allowTaskModelOverride": true,
+      "dispatchScope": "group_internal",
+      "permissions": [
+        "read",
+        "run_probes",
+        "issue_verdict"
+      ]
+    },
+    {
+      "seatId": "feedback-collector",
+      "department": "情报哨所",
+      "displayName": "意见收集员",
+      "persona": "纯只读情报分析员。静默监听群聊与外部反馈，甄别真正有价值的产品痛点，整理结构化摘要私聊上报给总秘书。",
+      "defaultModel": "deepseek/deepseek-v4-flash",
+      "fallbackModels": [
+        "deepseek/deepseek-flash"
+      ],
+      "thinking": "high",
+      "inheritGlobalAgentsMd": false,
+      "roleRulesPath": "rules/feedback-collector.md",
+      "allowTaskModelOverride": true,
+      "dispatchScope": "report_to_secretary_only",
+      "permissions": [
+        "read_only_observer",
+        "dm_secretary"
+      ]
+    }
+  ]
+}
