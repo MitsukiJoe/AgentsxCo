@@ -1,5 +1,7 @@
 # Agents x Company
 
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](./LICENSE)
+
 **把 Agent 从孤立的单次会话里解绑 —— 让独立开发者与小团队自由组建跨模型 AI 协作班底的团队协作底座**  
 *Unbind Agents from Isolated Sessions — A Freely Programmable, Cross-Harness Multi-Agent Team Collaboration Base*
 
@@ -243,3 +245,11 @@ AgentsxCo/
 └── scripts/
     └── e2e-studio.mjs        # Studio 工作台与官网自动化端到端校验脚本
 ```
+
+## 许可证 / License
+
+Copyright 2026 MitsukiJoe.
+
+本仓库原创代码、架构文档和示例采用 [Apache License 2.0](./LICENSE) 发布，归属声明见 [NOTICE](./NOTICE)。第三方材料如有单独标注，仍遵循其原有许可证。
+
+Original code, architecture documentation, and examples in this repository are licensed under the [Apache License 2.0](./LICENSE). See [NOTICE](./NOTICE) for attribution. Separately identified third-party materials retain their respective licences.

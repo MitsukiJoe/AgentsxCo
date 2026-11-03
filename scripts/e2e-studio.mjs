@@ -21,8 +21,8 @@ const check = (name, ok, detail = "") => {
 
 const browser = await chromium.launch();
 const errors = [];
-const newPage = async (viewport) => {
-  const page = await browser.newPage({ viewport });
+const newPage = async (viewport, opts = {}) => {
+  const page = await browser.newPage({ viewport, ...opts });
   page.on("pageerror", (e) => errors.push(`${page.url()} :: ${e.message}`));
   page.on("console", (m) => { if (m.type() === "error") errors.push(`${page.url()} :: console ${m.text()}`); });
   return page;
@@ -30,7 +30,7 @@ const newPage = async (viewport) => {
 
 const studioUrl = pathToFileURL(path.join(root, "docs/studio/index.html")).href;
 const page = await newPage({ width: 1520, height: 940 });
-await page.addInitScript(() => localStorage.setItem("axc-theme", "dark"));
+await page.addInitScript(() => localStorage.setItem("axc-theme-user", "dark"));
 await page.goto(studioUrl);
 await page.waitForSelector(".pinned");
 
@@ -217,7 +217,7 @@ check("手机端侧栏滑出", await mobile.evaluate(() => document.querySelecto
 const siteUrl = pathToFileURL(path.join(root, "docs/index.html")).href;
 if (fs.existsSync(path.join(root, "docs/index.html"))) {
   const site = await newPage({ width: 1440, height: 900 });
-  await site.addInitScript(() => localStorage.setItem("axc-site-theme", "dark"));
+  await site.addInitScript(() => localStorage.setItem("axc-site-theme-user", "dark"));
   await site.goto(siteUrl);
   await site.waitForTimeout(400);
   const s1 = await site.textContent("body");
@@ -279,6 +279,33 @@ if (fs.existsSync(path.join(root, "docs/index.html"))) {
   check("官网：手机端无横向溢出", ov2 <= 0, "overflow=" + ov2);
   const docsStudio = path.join(root, "docs/studio/index.html");
   check("官网：docs/studio/index.html 单一入口完整有效", fs.existsSync(docsStudio) && fs.readFileSync(docsStudio, "utf8") === fs.readFileSync(path.join(root, "docs/studio/index.html"), "utf8"));
+}
+
+// System color-scheme follow (no manual pin, legacy keys polluted with "dark")
+const themeTargets = [["Studio", studioUrl, "axc-theme-user", "axc-theme"]];
+if (fs.existsSync(path.join(root, "docs/index.html"))) themeTargets.push(["官网", siteUrl, "axc-site-theme-user", "axc-site-theme"]);
+for (const [label, url, userKey, legacyKey] of themeTargets) {
+  const tp = await newPage({ width: 1280, height: 800 }, { colorScheme: "light" });
+  await tp.addInitScript((k) => { if (!sessionStorage.getItem("seeded")) { localStorage.setItem(k, "dark"); sessionStorage.setItem("seeded", "1"); } }, legacyKey);
+  await tp.goto(url);
+  await tp.waitForTimeout(200);
+  const first = await tp.evaluate(([u, l]) => ({ theme: document.documentElement.getAttribute("data-theme"), user: localStorage.getItem(u), legacy: localStorage.getItem(l) }), [userKey, legacyKey]);
+  check(`${label}：系统浅色首开跟随 + 清理旧缓存 + 启动不写入`, first.theme === "light" && first.user === null && first.legacy === null, JSON.stringify(first));
+  const themeIs = (t) => tp.waitForFunction((v) => document.documentElement.getAttribute("data-theme") === v, t, { timeout: 2000 }).then(() => true, () => false);
+  await tp.emulateMedia({ colorScheme: "dark" });
+  const toDark = await themeIs("dark");
+  const iconDark = await tp.evaluate(() => document.querySelector("#themeBtn").innerHTML.includes("circle"));
+  check(`${label}：系统切到深色实时跟随`, toDark && iconDark);
+  await tp.emulateMedia({ colorScheme: "light" });
+  check(`${label}：系统切回浅色实时跟随`, await themeIs("light"));
+  await tp.click("#themeBtn");
+  const pinned = (await tp.getAttribute("html", "data-theme")) === "dark" && (await tp.evaluate((u) => localStorage.getItem(u), userKey)) === "dark";
+  await tp.reload();
+  const kept = (await tp.getAttribute("html", "data-theme")) === "dark";
+  await tp.click("#themeBtn");
+  const unpinned = (await tp.getAttribute("html", "data-theme")) === "light" && (await tp.evaluate((u) => localStorage.getItem(u), userKey)) === null;
+  check(`${label}：手动锁定刷新保留，切回系统主题即解除锁定`, pinned && kept && unpinned);
+  await tp.close();
 }
 
 check("运行时零 JS 报错", errors.length === 0, errors.slice(0, 5).join(" | "));

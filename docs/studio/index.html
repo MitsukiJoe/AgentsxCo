@@ -9,11 +9,16 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%233366E8'/%3E%3Ctext x='32' y='42' font-family='Arial' font-weight='700' font-size='26' fill='white' text-anchor='middle'%3EA×C%3C/text%3E%3C/svg%3E">
 <script>
   (function () {
+    var t = "dark";
+    try { if (window.matchMedia("(prefers-color-scheme: light)").matches) t = "light"; } catch (e) {}
     try {
-      var saved = localStorage.getItem("axc-theme");
-      var t = saved || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
-      document.documentElement.setAttribute("data-theme", t);
+      // Pre-1.1 builds persisted these on every boot; drop them so the OS preference wins.
+      localStorage.removeItem("axc-theme");
+      localStorage.removeItem("axc-site-theme");
+      var pinned = localStorage.getItem("axc-theme-user");
+      if (pinned === "light" || pinned === "dark") t = pinned;
     } catch (e) {}
+    document.documentElement.setAttribute("data-theme", t);
   })();
 </script>
 <style>
@@ -796,12 +801,7 @@ textarea.field.persona { font-family: var(--font-sans); font-size: 13.5px; min-h
 .stat .d { font-size: 11.5px; color: var(--text-2); }
 .blk-head h4 { margin: 0; font-size: 15px; font-weight: 680; }
 .blk-body { display: flex; flex-direction: column; gap: 12px; }
-.tree { width: 100%; align-items: stretch; gap: 14px; }
-.t-tier { display: flex; flex-direction: column; gap: 8px; }
 .t-label { font-size: 11.5px; font-weight: 650; color: var(--text-3); text-transform: uppercase; letter-spacing: .05em; }
-.t-tier > .t-row { display: flex; gap: 10px; flex-wrap: wrap; }
-.t-groups { padding-top: 6px; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
-.t-groups::before { display: none; }
 .t-grp { padding: 12px; border-radius: 14px; background: var(--bg-1); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; }
 .t-grp .gh { display: flex; align-items: center; justify-content: space-between; gap: 6px; font-size: 13px; padding-bottom: 6px; border-bottom: 1px solid var(--line); }
 .t-node { cursor: pointer; display: flex; align-items: center; gap: 9px; padding: 8px 11px; border-radius: 11px; }
@@ -833,17 +833,6 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
 .trow .t-txt span { font-size: 11.5px; color: var(--text-3); display: block; }
 .toggle.on { background: var(--accent-fill); border-color: transparent; }
 .toggle.on::after { transform: translateX(16px); }
-.fb-list { display: flex; flex-wrap: wrap; gap: 6px; }
-.fb-chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 8px; background: var(--bg-2); border: 1px solid var(--line-strong); font-family: var(--font-mono); font-size: 11.5px; color: var(--text-2); }
-.fb-chip button { width: 16px; height: 16px; border-radius: 4px; display: inline-grid; place-items: center; color: var(--text-3); font-size: 13px; }
-.fb-chip button:hover { background: var(--bg-3); color: var(--danger); }
-.kv-box { display: flex; align-items: center; gap: 14px; padding: 12px; border-radius: 12px; background: var(--bg-2); border: 1px solid var(--line); }
-.kv-ring { width: 68px; height: 68px; border-radius: 50%; background: conic-gradient(var(--ok) var(--deg, 320deg), var(--bg-3) 0deg); display: grid; place-items: center; flex: none; position: relative; }
-.kv-ring::before { content: ""; position: absolute; inset: 7px; border-radius: 50%; background: var(--bg-2); }
-.kv-ring span { position: relative; z-index: 1; font-family: var(--font-mono); font-size: 13px; font-weight: 700; color: var(--ok); }
-.kv-meta { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; font-size: 12px; }
-.kv-meta .r { display: flex; align-items: center; justify-content: space-between; gap: 8px; color: var(--text-3); }
-.kv-meta .r b { font-family: var(--font-mono); font-size: 11.5px; color: var(--text-1); }
 /* ---------- v1.1 evolution: radar, governance, piggyback, memory ---------- */
 .seq-tag { font-family: var(--font-mono); font-size: 10.5px; color: var(--text-3); }
 .rd-note { font-size: 11.5px; color: var(--text-3); line-height: 1.55; }
@@ -942,6 +931,188 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
   .mode-btn code { font-size: 9.5px; }
   .rd-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+/* ---------- Emoji rendering ---------- */
+:root { --font-emoji: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Twemoji Mozilla", sans-serif; }
+.av, .me-av, .g-stack .mini, .em, .emo, .rd-tab .em { font-family: var(--font-emoji); font-variant-emoji: emoji; }
+.av .star, .av .dot { font-family: var(--font-sans); }
+
+/* ---------- Avatar badges ---------- */
+.av.xl { --s: 60px; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .18), var(--shadow-md); }
+.av.has-star .dot { bottom: auto; top: -1px; }
+.av.sm .star { width: 12px; height: 12px; font-size: 7.5px; }
+.av.xl .star { width: 20px; height: 20px; font-size: 11px; right: -2px; bottom: -2px; box-shadow: 0 0 0 2.5px var(--bg-2); }
+.av.xl .dot { width: 12px; height: 12px; right: 1px; box-shadow: 0 0 0 2.5px var(--bg-2); }
+.av.xl.has-star .dot { top: 1px; }
+
+/* ---------- Sidebar: pinned seat, groups, department accordion ---------- */
+.pinned { position: relative; overflow: hidden; padding: 11px 12px; }
+.pinned::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(120% 110% at 0% 0%, rgba(233, 185, 73, .16), transparent 62%); }
+.pinned > * { position: relative; z-index: 1; }
+.pinned .sub { justify-content: flex-start; }
+.pinned .sub > .priv { flex: none; overflow: visible; display: inline-flex; align-items: center; height: 18px; padding: 0 6px; border-radius: 6px; background: var(--bg-2); border: 1px solid var(--edge-gold); color: var(--gold); font-family: var(--font-mono); font-size: 10px; font-weight: 650; }
+.pinned .sub > span:last-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.pinned .scope-line { font-family: var(--font-mono); font-size: 10.5px; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sb-row .sub .unread { margin-left: auto; }
+.g-stack { width: 50px; }
+.g-stack .mini { width: 24px; height: 24px; font-size: 12.5px; box-shadow: 0 0 0 2px var(--bg-1), inset 0 0 0 1px rgba(255, 255, 255, .16); }
+.g-stack .mini:first-child { position: relative; z-index: 2; }
+.g-stack .mini + .mini { position: relative; z-index: 1; }
+.sb-row.active .g-stack .mini, .sb-row.active .g-stack .more { box-shadow: 0 0 0 2px var(--bg-3); }
+.dept-head { text-align: left; cursor: pointer; margin-top: 2px; }
+.dept-head .d-name { display: inline-flex; align-items: center; gap: 6px; min-width: 0; }
+.dept-head .cnt { background: var(--bg-2); border: 1px solid var(--line); padding: 0 6px; border-radius: 999px; font-size: 10.5px; line-height: 16px; }
+.dept-body > div { min-height: 0; display: flex; flex-direction: column; gap: 2px; }
+.dept-body.closed > div { visibility: hidden; transition: visibility 0s var(--dur-3); }
+.sb-row.emp { padding: 6px 10px 6px 12px; }
+.sb-row.emp .name { font-weight: 560; }
+
+/* ---------- Scene B: compact governance + piggyback panel ---------- */
+.stream-inner { container: stream / inline-size; }
+.room-rules { margin: 0 0 6px; display: flex; flex-direction: column; gap: 8px; }
+.rr-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; align-items: start; }
+.rr-card { box-shadow: var(--shadow-sm); }
+.rr-card .sc-head { padding: 8px 11px; }
+.rr-card .sc-title { font-size: 12.5px; flex-wrap: nowrap; }
+.rr-card .sc-title > span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rr-card .sc-title > span:last-child { flex: none; display: inline-flex; align-items: center; gap: 6px; }
+.rr-card .sc-sub { font-size: 11.5px; line-height: 1.45; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.day-div { margin-bottom: 14px; }
+.rr-card .sc-body { padding: 9px 11px 11px; gap: 8px; }
+.rr-card .mode-btn { padding: 6px 8px; }
+.rr-card .mode-btn b { font-size: 12px; }
+.rr-card .flow-line { font-size: 11px; gap: 4px; }
+.rr-card .flow-line .fn { padding: 2px 7px; border-radius: 7px; }
+.rr-card .flow-line .fn.rt { opacity: .5; border-style: dashed; }
+.rr-card .flow-line .fn.rt.on { opacity: 1; border-style: solid; color: var(--accent); background: var(--tint-accent); border-color: var(--edge-accent); }
+.t-scope { display: flex; align-items: center; gap: 6px; min-width: 0; font-size: 11.5px; color: var(--text-2); }
+.t-scope code { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 11px; }
+.t-lock { font-size: 12px; color: var(--gold); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rr-card .cur-list { gap: 3px; }
+.rr-card .cur { grid-template-columns: 22px minmax(0, 1fr) auto; gap: 8px; padding: 3px 4px 3px 7px; min-height: 30px; }
+.rr-card .cur .av { --s: 22px; font-size: 11px; }
+.rr-card .cur > span { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+.rr-card .cur b { flex: none; font-size: 12px; }
+.rr-card .cur small { flex: 1; min-width: 0; }
+.rr-card .cur .btn.sm { height: 22px; padding: 0 8px; font-size: 11.5px; }
+.rr-card .cur .chip { height: 20px; padding: 0 7px; font-size: 10.5px; }
+.rr-card .envlp { padding: 6px 8px; font-size: 10.5px; line-height: 1.5; }
+.rr-card .rd-note { font-size: 11px; line-height: 1.5; }
+.rr-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 7px 8px 7px 12px; border-radius: var(--r-md); background: var(--bg-1); border: 1px solid var(--line-strong); box-shadow: var(--shadow-sm); font-size: 12px; color: var(--text-2); }
+.rr-bar b { color: var(--text-1); font-weight: 650; }
+.rr-bar .btn { margin-left: auto; }
+@container stream (max-width: 700px) { .rr-grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---------- Scene A: stage gate stepper ---------- */
+.scard .gate-steps { padding: 0; }
+.gate-steps .step { padding: 8px 0; }
+.gate-steps .step + .step::before { top: -12px; height: 22px; }
+.st-idx svg { width: 15px; height: 15px; }
+.st-title b { font-size: 13px; font-weight: 650; }
+.st-title .chip { margin-left: auto; }
+.st-act { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.step.v-warn .bar i { background: repeating-linear-gradient(135deg, var(--edge-warn) 0 6px, transparent 6px 12px); }
+
+/* ---------- Inspector: identity, decoupling, fallbacks, KV gauge ---------- */
+.in-body > * { flex-shrink: 0; }
+.id-box { position: relative; overflow: hidden; padding: 14px; }
+.id-box::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(110% 120% at 0% 0%, hsl(var(--hue, 210) 80% 60% / .14), transparent 62%); }
+.id-box > * { position: relative; }
+.id-card .seat-id { margin-top: 2px; font-family: var(--font-mono); font-size: 11px; color: var(--text-3); }
+.dc { gap: 7px; }
+.dc .ov { display: flex; align-items: center; gap: 6px; }
+.dc.persona { background: linear-gradient(var(--tint-accent), var(--tint-accent)), var(--bg-2); border-color: var(--edge-accent); }
+.dc.persona .ov { color: var(--accent); }
+.dc.model { background: linear-gradient(var(--tint-violet), var(--tint-violet)), var(--bg-2); border-color: var(--edge-violet); }
+.dc.model .ov { color: var(--violet); }
+.dc .dc-model { font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; color: var(--text-1); padding: 4px 7px; border-radius: 7px; background: var(--bg-2); border: 1px solid var(--line-strong); word-break: break-all; line-height: 1.4; }
+.dc small { font-size: 11px; color: var(--text-3); line-height: 1.4; }
+.dc-link { padding: 0 2px; }
+.dc-link .dc-arrow { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-size: 13px; color: var(--accent); background: var(--bg-2); border: 1px solid var(--edge-accent); box-shadow: var(--shadow-sm); }
+.dc-link span { color: var(--text-3); }
+.persona-box { margin-top: 2px; }
+.tok-est { font-family: var(--font-mono); font-size: 10.5px; color: var(--text-2); white-space: nowrap; }
+.fb-list li { transition: border-color var(--dur-1), background var(--dur-1); }
+.fb-list li:hover { border-color: var(--line-strong); }
+.fb-list li:first-child .idx { background: var(--tint-accent); color: var(--accent); border: 1px solid var(--edge-accent); }
+.fb-list .fb-st { font-size: 10.5px; color: var(--text-3); flex: none; }
+.fb-list .icon-btn:hover { color: var(--danger); background: var(--tint-danger); }
+.fb-list li.fb-empty { font-size: 12px; color: var(--text-3); padding: 8px 10px; border-style: dashed; border-color: var(--line-strong); background: transparent; }
+.kv-box2 { display: flex; flex-direction: column; }
+.gauge .g-fg { transition: stroke-dasharray 640ms var(--ease-out), stroke var(--dur-3); }
+.gauge .g-val b { color: var(--text-1); }
+.gauge.mid .g-val b { color: var(--warn); }
+.gauge.low .g-val b { color: var(--danger); }
+.kv-rows div { align-items: baseline; }
+.kv-rows div span { white-space: nowrap; }
+.kv-state .ic { width: 13px; height: 13px; }
+
+/* ---------- Scene C: org tree connectors + host wall ---------- */
+.org .tree { display: flex; flex-direction: column; align-items: stretch; gap: 0; }
+.t-tier { display: flex; flex-direction: column; gap: 10px; }
+.t-tier + .t-tier { margin-top: 0; }
+.t-hub { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; min-width: 0; }
+.t-hub.solo { display: flex; justify-content: center; }
+.t-hub .side { display: flex; align-items: center; min-width: 0; }
+.t-hub .side.l { justify-content: flex-end; }
+.t-hub .side.r { justify-content: flex-start; }
+.t-hub .t-node { flex: 0 1 auto; min-width: 0; }
+.t-mid { position: relative; height: 34px; }
+.t-mid::before { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--line-strong); transform: translateX(-.5px); }
+.t-mid .t-label { position: absolute; left: 2px; bottom: 6px; }
+.dc .chip { align-self: flex-start; }
+.t-h { flex: 0 1 44px; min-width: 18px; height: 1px; background: repeating-linear-gradient(90deg, var(--line-strong) 0 4px, transparent 4px 8px); }
+.t-v { width: 1px; height: 18px; background: var(--line-strong); margin: 0 auto; flex: none; }
+.t-node.human { padding: 7px 14px 7px 9px; }
+.t-node.human .em { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--bg-2); border: 1px solid var(--line-strong); font-size: 15px; }
+.t-node.sec .em { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--bg-2); border: 1px solid var(--edge-gold); font-size: 15px; }
+.t-groups2 { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 44px; row-gap: 14px; }
+.t-groups2 .t-grp { position: relative; }
+.t-groups2 .t-grp::before { content: ""; position: absolute; top: -14px; bottom: -14px; width: 1px; background: var(--line-strong); }
+.t-groups2 .t-grp.last-row::before { bottom: auto; height: 37px; }
+.t-groups2 .t-grp::after { content: ""; position: absolute; top: 22px; width: 22px; height: 1px; background: var(--line-strong); }
+.t-groups2 .t-grp:nth-child(odd)::before { right: -22.5px; }
+.t-groups2 .t-grp:nth-child(even)::before { left: -22.5px; }
+.t-groups2 .t-grp:nth-child(odd)::after { right: -22px; }
+.t-groups2 .t-grp:nth-child(even)::after { left: -22px; }
+.t-grp .gh b { display: inline-flex; align-items: center; gap: 6px; min-width: 0; }
+.t-grp .gh .gh-tags { display: inline-flex; gap: 5px; flex: none; }
+.t-grp .gm { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.t-grp .gm .t-node { min-width: 0; padding: 6px 9px; border-radius: 10px; background: var(--bg-2); border: 1px solid var(--line); }
+.t-grp .gm .t-node .em { font-size: 16px; }
+.t-grp .gm .t-node .role { margin-left: auto; flex: none; font-size: 10px; font-weight: 650; padding: 0 5px; border-radius: 5px; color: var(--text-3); background: var(--bg-3); border: 1px solid var(--line); }
+.t-grp .gm .t-node .role.lead { color: var(--accent); background: var(--tint-accent); border-color: var(--edge-accent); }
+.t-grp .gm .t-node .role.critic { color: var(--warn); background: var(--tint-warn); border-color: var(--edge-warn); }
+.legend i.solid { height: 1px; width: 18px; border-radius: 0; background: var(--line-strong); }
+.legend i.dash { height: 1px; width: 18px; border-radius: 0; background: repeating-linear-gradient(90deg, var(--text-3) 0 4px, transparent 4px 8px); }
+.host { gap: 10px; }
+.host .h-top { min-width: 0; }
+.host .h-top .nm { min-width: 0; flex: 1; line-height: 1.25; }
+.host .h-top .nm b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.host .h-top .nm small { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.host .h-logo { background: linear-gradient(135deg, var(--l1), var(--l2)); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .28), 0 6px 14px -8px var(--l2); letter-spacing: -.02em; }
+.host .h-st { justify-content: space-between; }
+.host .h-st span { display: inline-flex; align-items: center; gap: 6px; }
+.host .h-st .lat { font-family: var(--font-mono); font-size: 10.5px; color: var(--text-3); font-weight: 500; }
+.host.scanning { border-color: var(--edge-warn); }
+.host .slots { margin-top: auto; display: flex; flex-direction: column; gap: 4px; }
+.host .slot { padding: 3px 6px 3px 3px; border-radius: 8px; gap: 6px; font-size: 11px; background: var(--bg-2); }
+.host .slot code { font-size: 10.5px; }
+.host .slot code:last-child { color: var(--text-1); }
+.host .slot .sk { flex: none; height: 18px; padding: 0 5px; border-radius: 5px; display: inline-grid; place-items: center; font-family: var(--font-sans); font-size: 10px; font-weight: 650; color: var(--accent); background: var(--tint-accent); border: 1px solid var(--edge-accent); }
+.host .slot .sk.fb { color: var(--text-2); background: var(--bg-3); border-color: var(--line-strong); }
+.st-desc code { white-space: nowrap; font-size: 11.5px; padding: 0 5px; border-radius: 5px; background: var(--bg-3); border: 1px solid var(--line); }
+.new-pill { max-width: calc(100% - 24px); }
+.new-pill button:not(.x) { min-width: 0; white-space: nowrap; overflow: hidden; }
+@container stream (max-width: 640px) {
+  .t-groups2 { grid-template-columns: minmax(0, 1fr); }
+  .t-groups2 .t-grp::before, .t-groups2 .t-grp::after, .t-mid::before { display: none; }
+  .t-hub { grid-template-columns: minmax(0, 1fr); gap: 8px; justify-items: center; }
+  .t-hub .side { justify-content: center; }
+  .t-h { display: none; }
+}
+@media (max-width: 559px) {
+  .t-grp .gm { grid-template-columns: minmax(0, 1fr); }
+}
 /* === END BRIDGE CSS === */
 
 </style>
@@ -974,7 +1145,7 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
       </div>
     </div>
     <div class="sb-foot">
-      <div class="me-av">🧑‍💼</div>
+      <div class="me-av">&#x1F9D1;&#x200D;&#x1F4BC;</div>
       <div class="who-me"><b>老板 · Owner</b><span>Human Owner · 仅与总秘书 1v1</span></div>
       <button class="icon-btn" data-act="theme" id="themeBtn" aria-label="切换深浅主题"></button>
     </div>
@@ -1048,7 +1219,7 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
   }
 
   seat("chief-secretary", {
-    name: "助手 · 总秘书", short: "助手", en: "Chief Secretary & Dispatcher", emoji: "👩‍💼", hue: 38, dept: "总秘书处",
+    name: "助手 · 总秘书", short: "助手", en: "Chief Secretary & Dispatcher", emoji: "\uD83D\uDC69\u200D\uD83D\uDCBC", hue: 38, dept: "总秘书处",
     status: "working", statusText: "正在汇总「设计原型」v1.1 + 扣留 Step 2",
     persona: "人类老板的唯一日常搭档与总调度官。负责接收原始想法、主动追问扩充、将多步需求拆为阶段闸门（Stage-Gated Holding），扣留后续阶段不进群；代表老板拉群派活、二审外部收集员情报并作最终验收把关。",
     inheritGlobalAgentsMd: true, allowTaskModelOverride: false,
@@ -1206,7 +1377,7 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
   ];
 
   var S = {
-    theme: localStorage.getItem("axc-theme") || "dark",
+    theme: document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark",
     room: "dm:chief-secretary",
     insp: "chief-secretary",
     inspOpen: window.innerWidth > 1179,
@@ -1223,6 +1394,8 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
     radar: 0,
     topicPick: {},
     memProvider: "memory-lancedb-pro",
+    deptClosed: {},
+    gateAnim: false,
     rulesOpen: window.matchMedia("(min-width: 820px)").matches,
     pig: { head: 52, cur: { "ux-lead": 50, "visual-designer": 49, "prototype-engineer": 51, "design-critic": 52 }, woke: null, phase: 0, env: null },
     msgs: {}
@@ -1267,7 +1440,7 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
         id: "TASK-0412 · Step 1 / 1（当前群可见范围）",
         title: "《第一份：2D 产品界面设计》— 仿 PulseChat 极简高帧率桌面 + 移动双端界面",
         scope: "specs/IA_STATE_MAP.md · specs/VISUAL_TOKENS.md · ui/chat-2d-proto.html",
-        note: "🔒 阶段闸门保护生效：老板交代的第二阶段实现任务已由总秘书扣留（组员可见性 0%），本群只拿到下方这份只读接口契约。",
+        note: "🔒 第二阶段已由总秘书扣留（组员可见性 0%），本群只拿到下方只读接口契约。",
         contract: true
       }
     },
@@ -1339,8 +1512,10 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
       .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   }
   function avHtml(s, cls) {
-    var dotCls = s.status === "working" ? "working" : (s.status === "reviewing" ? "reviewing" : "");
-    return '<div class="av ' + (cls || "") + '" style="--hue:' + (s.hue || 210) + '">' + esc(s.emoji || "🤖") + '<span class="dot ' + dotCls + '"></span></div>';
+    var dotCls = s.canWrite === false ? "ro" : (s.status === "reviewing" ? "busy" : "");
+    var star = s.id === "chief-secretary";
+    return '<div class="av ' + (cls || "") + (star ? " has-star" : "") + '" style="--hue:' + (s.hue || 210) + '">' + esc(s.emoji || "🤖") +
+      (star ? '<span class="star" aria-hidden="true">★</span>' : "") + '<span class="dot ' + dotCls + '"></span></div>';
   }
   function chip(txt, v, extra) {
     return '<span class="chip ' + (v ? "v-" + v : "") + (extra ? " " + extra : "") + '">' + txt + "</span>";
@@ -1423,31 +1598,47 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
 
   function pigHtml() {
     var P = S.pig;
-    var h = '<div class="rp-label" style="margin:2px 0 0">🔔 明面 @ 玻璃房 + 底层按需捷带唤醒 · Lazy Cursor Piggybacking</div>';
-    h += '<div class="rd-note">群内对齐、指路、打回一律显式 @。没被 @ 的成员只累积待消费事件，lastReadEventSeq 原地不动（0 Token）；被点名后才把积压增量打包成 Turn Delta Envelope 捷带注入，消费成功后才提交游标。消息头里的 #序号 就是事件序号。</div>';
+    var pending = PIG_SEATS.filter(function (id) { return P.head - P.cur[id] > 0; }).length;
+    var h = '<div class="scard rr-card" id="pigCard"><div class="sc-head"><div class="sc-title"><span>🔔 明面 @ + 按需捷带唤醒 · Lazy Cursor</span><span>' + chip("head #" + P.head, "violet", "mono") + "</span></div>";
+    var pigTip = "群内对齐、指路、打回一律显式 @。没被 @ 的成员只累积待消费事件，lastReadEventSeq 原地不动（0 Token）；被点名后才把积压增量打包成 Turn Delta Envelope 捷带注入，消费成功后才提交游标。消息头里的 #序号 就是事件序号。";
+    h += '<div class="sc-sub" title="' + esc(pigTip) + '">没被 @ 只累积事件（0 Token）；被点名才捷带注入 · ' + (pending ? pending + " 席待消费" : "全员已同步") + '</div></div><div class="sc-body">';
     h += '<div class="cur-list">' + PIG_SEATS.map(function (id) {
       var s = SEATS[id], c = P.cur[id], pend = P.head - c, woke = P.woke === id, st;
       if (woke && P.phase === 1) st = chip("消费中 · 游标未提交", "warn");
       else if (woke) st = chip("游标已提交", "ok");
-      else if (pend > 0) st = '<button class="btn sm" data-act="pig-at" data-seat="' + id + '"' + (P.phase === 1 ? " disabled" : "") + ">@" + esc(s.short) + " 点名</button>";
+      else if (pend > 0) st = '<button class="btn sm" data-act="pig-at" data-seat="' + id + '" title="@' + esc(s.short) + ' 点名唤醒" aria-label="@' + esc(s.short) + ' 点名唤醒"' + (P.phase === 1 ? " disabled" : "") + ">@ 点名</button>";
       else st = chip("已同步", "neutral");
-      return '<div class="cur' + (woke ? " woke" : "") + '">' + avHtml(s, "sm") + "<span><b>" + esc(s.name) + "</b><small>lastReadEventSeq #" + c + (pend > 0 ? " · 待消费 +" + pend + " · 0 Token 休眠" : "") + "</small></span>" + st + "</div>";
+      return '<div class="cur' + (woke ? " woke" : "") + '">' + avHtml(s, "sm") + '<span><b>' + esc(s.name) + '</b><small title="lastReadEventSeq #' + c + (pend > 0 ? " · 待消费 +" + pend + " · 0 Token 休眠" : "") + '">lastReadEventSeq #' + c + (pend > 0 ? " · 待消费 +" + pend : "") + "</small></span>" + st + "</div>";
     }).join("") + "</div>";
     if (P.env) {
       h += '<div class="envlp">Turn Delta Envelope { seat: "' + esc(P.env.seat) + '", fromSeq: ' + P.env.from + ", toSeq: " + P.env.to + ", events: " + (P.env.to - P.env.from + 1) + ', tag: "Context-only" }<br>' +
         (P.phase === 1 ? "→ 注入中；消费成功前 lastReadEventSeq 保持 #" + (P.env.from - 1) : "✓ 消费成功 → 提交 lastReadEventSeq #" + (P.env.from - 1) + " → #" + P.env.to) + "</div>";
     }
-    return h;
+    return h + "</div></div>";
   }
 
   function roomRulesCard(g) {
     var m = GOV[g.mode];
-    var h = '<div class="scard room-rules"><div class="sc-head"><div class="sc-title"><span>🏛️ 本群制度门禁 · Project Governance Mode</span><span>' + chip(esc(g.mode), m.v, "mono") + '<button class="btn sm ghost" data-act="rules-toggle">' + (S.rulesOpen ? "收起" : "展开") + "</button></span></div>";
-    if (!S.rulesOpen) return h + "</div></div>";
-    h += '<div class="sc-sub">' + esc(m.d) + '</div></div><div class="sc-body">' + modeSegHtml(g);
-    h += '<div class="flow-line">' + m.flow.map(function (f, i) { return (i ? '<span class="fx">→</span>' : "") + '<span class="fn' + (f.indexOf("0 Token") === 0 ? " z" : "") + '">' + esc(f) + "</span>"; }).join("") + "</div>";
-    h += routesHtml(m.route || g.route || "room_pipeline");
-    if (g.id === "group:design-prototype") h += pigHtml();
+    var hasPig = g.id === "group:design-prototype";
+    var h = '<div class="room-rules">';
+    if (!S.rulesOpen) {
+      h += '<div class="rr-bar"><span>🏛️ 制度门禁</span>' + chip(esc(g.mode), m.v, "mono") + '<span class="fx">·</span><span>' + esc(m.n) + "</span>";
+      if (hasPig) {
+        var pend = PIG_SEATS.filter(function (id) { return S.pig.head - S.pig.cur[id] > 0; }).length;
+        h += '<span class="fx">·</span><span>🔔 捷带唤醒 <b>' + pend + "</b> 席待消费</span>";
+      }
+      return h + '<button class="btn sm" data-act="rules-toggle" aria-expanded="false">展开治理面板</button></div></div>';
+    }
+    h += '<div class="rr-grid"' + (hasPig ? "" : ' style="grid-template-columns:minmax(0,1fr)"') + ">";
+    h += '<div class="scard rr-card" id="govCard"><div class="sc-head"><div class="sc-title"><span>🏛️ 本群制度门禁 · Governance</span><span>' + chip(esc(g.mode), m.v, "mono") + '<button class="btn sm ghost" data-act="rules-toggle" aria-expanded="true">收起</button></span></div>';
+    h += '<div class="sc-sub" title="' + esc(m.d) + '">' + esc(m.d) + '</div></div><div class="sc-body">' + modeSegHtml(g);
+    var activeRoute = m.route || g.route || "room_pipeline";
+    h += '<div class="flow-line">' + m.flow.map(function (f, i) { return (i ? '<span class="fx">→</span>' : "") + '<span class="fn' + (f.indexOf("0 Token") === 0 ? " z" : "") + '">' + esc(f) + "</span>"; }).join("");
+    h += '<span class="fx">·</span>' + ROUTES.map(function (r) {
+      return '<span class="fn rt' + (r.id === activeRoute ? " on" : "") + '" title="' + esc(r.id + " · " + r.d) + '">' + esc(r.n) + "</span>";
+    }).join("") + "</div>";
+    h += "</div></div>";
+    if (hasPig) h += pigHtml();
     return h + "</div></div>";
   }
 
@@ -1479,8 +1670,9 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
     h += '<div class="sb-sec"><div class="sb-label"><span>置顶 · 人类唯一 1v1 入口</span><span class="cnt">1v1</span></div>';
     h += '<div class="pinned ' + (S.room === "dm:chief-secretary" ? "active" : "") + '" data-act="open" data-room="dm:chief-secretary">';
     h += avHtml(sec);
-    h += '<div class="meta"><div class="top"><span class="name"><span class="star">★</span>' + esc(sec.name) + '</span><span class="time">' + (secLast ? esc(secLast.time) : "14:28") + "</span></div>";
-    h += '<div class="sub"><span>' + esc(sec.statusText) + "</span></div></div></div></div>";
+    h += '<div class="meta"><div class="top"><span class="name">' + esc(sec.name) + '</span><span class="time">' + (secLast ? esc(secLast.time) : "14:28") + "</span></div>";
+    h += '<div class="scope-line">company_all · 在线 · ' + esc(sec.model) + "</div>";
+    h += '<div class="sub"><span class="priv">1v1 · 置顶</span><span>' + esc(sec.statusText) + "</span></div></div></div></div>";
 
     h += '<div class="sb-sec"><div class="sb-label"><span>项目群 · 透明玻璃房</span><span class="cnt">' + GROUPS.length + "</span></div>";
     GROUPS.forEach(function (g) {
@@ -1491,7 +1683,8 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
       h += '<div class="sb-row ' + (S.room === g.id ? "active" : "") + '" data-act="open" data-room="' + esc(g.id) + '">';
       h += '<div class="g-stack"><span class="mini" style="--hue:' + m0.hue + '">' + m0.emoji + '</span><span class="mini" style="--hue:' + m1.hue + '">' + m1.emoji + '</span><span class="more">+' + extraCnt + "</span></div>";
       h += '<div class="meta"><div class="top"><span class="name">' + esc(g.name) + '</span><span class="time">' + esc(g.badge) + "</span></div>";
-      h += '<div class="sub"><span style="overflow:hidden;text-overflow:ellipsis">' + esc(g.topic) + "</span>" + (g.unread ? '<span class="unread" title="未读新消息"></span>' : "") + "</div></div></div>";
+      var unreadN = g.unread ? (g.id === "group:design-prototype" && S.pillShown ? 11 : 1) : 0;
+      h += '<div class="sub"><span style="overflow:hidden;text-overflow:ellipsis">' + esc(g.topic) + "</span>" + (unreadN ? '<span class="unread" title="' + unreadN + ' 条未读新消息">' + unreadN + "</span>" : "") + "</div></div></div>";
     });
     h += "</div>";
 
@@ -1501,6 +1694,8 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
       var d = SEATS[k].dept;
       if (k !== "chief-secretary" && d && depts.indexOf(d) === -1) depts.push(d);
     });
+    var deptIco = { "原型设计师": "🎨", "情报哨所": "📡", "内容工作室": "📝", "工程与质量": "🛠️", "产品与游戏": "🎮", "导入员工": "🧩" };
+    var deptH = "", deptTotal = 0;
     depts.forEach(function (d) {
       var ids = Object.keys(SEATS).filter(function (k) { return k !== "chief-secretary" && SEATS[k].dept === d; });
       var vis = ids.filter(function (k) {
@@ -1508,17 +1703,23 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
         return !q || (s.name + " " + s.id + " " + s.model + " " + s.dept).toLowerCase().indexOf(q) !== -1;
       });
       if (!vis.length) return;
-      h += '<div class="sb-sec"><div class="sb-label"><span>部门 · ' + esc(d) + '</span><span class="cnt">' + vis.length + "</span></div>";
+      deptTotal += vis.length;
+      var open = !!q || !S.deptClosed[d];
+      deptH += '<button class="dept-head" data-act="dept" data-dept="' + esc(d) + '" aria-expanded="' + open + '">' +
+        '<svg class="ic chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>' +
+        '<span class="d-name"><span class="emo">' + (deptIco[d] || "👥") + "</span>" + esc(d) + '</span><span class="cnt">' + vis.length + "</span></button>";
+      deptH += '<div class="dept-body' + (open ? "" : " closed") + '" data-dept-body="' + esc(d) + '"><div>';
       vis.forEach(function (id) {
         var s = SEATS[id];
         var rm = "dm:" + id;
-        h += '<div class="sb-row ' + (S.room === rm ? "active" : "") + '" data-act="open" data-room="' + esc(rm) + '">';
-        h += avHtml(s, "sm");
-        h += '<div class="meta"><div class="top"><span class="name">' + esc(s.name) + '</span><span class="time mono">' + esc(s.model.split("/")[1] || s.model) + "</span></div>";
-        h += '<div class="sub"><span>' + esc(s.statusText) + "</span></div></div></div>";
+        deptH += '<div class="sb-row emp ' + (S.room === rm ? "active" : "") + '" data-act="open" data-room="' + esc(rm) + '" data-seat="' + esc(id) + '">';
+        deptH += avHtml(s, "sm");
+        deptH += '<div class="meta"><div class="top"><span class="name">' + esc(s.name) + '</span><span class="time mono">' + esc(s.model.split("/")[1] || s.model) + "</span></div>";
+        deptH += '<div class="sub"><span>' + esc(s.statusText) + "</span></div></div></div>";
       });
-      h += "</div>";
+      deptH += "</div></div>";
     });
+    if (deptH) h += '<div class="sb-sec"><div class="sb-label"><span>部门与专职员工</span><span class="cnt">' + deptTotal + "</span></div>" + deptH + "</div>";
 
     h += '<div class="sb-sec"><div class="sb-label"><span>架构与拓扑</span><span class="cnt">C</span></div>';
     h += '<div class="sb-row ' + (S.room === "org" ? "active" : "") + '" data-act="open" data-room="org">';
@@ -1541,7 +1742,7 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
     } else if (S.room.indexOf("group:") === 0) {
       var g = GROUPS.find(function (x) { return x.id === S.room; }) || GROUPS[0];
       h += '<div class="av sm" style="--hue:222">🏛️</div>';
-      h += '<div class="h-title"><div class="t-row"><h2>' + esc(g.name) + "</h2>" + chip(g.members.length + " 席位在群", "accent") + chip(esc(g.mode), GOV[g.mode].v, "mono h-hide-xs") + (g.id === "group:design-prototype" ? chip("Stage 1 Active", "gold") : "") + chip("KV 92.4%", "ok", "mono h-hide-xs") + "</div>";
+      h += '<div class="h-title"><div class="t-row"><h2>' + esc(g.name) + "</h2>" + chip(g.members.length + " 席位在群", "accent") + chip(esc(g.mode), GOV[g.mode].v, "mono h-hide-xs") + (g.id === "group:design-prototype" ? chip("Stage 1 Active", "gold", "h-hide-xs") : "") + chip("KV 92.4%", "ok", "mono h-hide-xs") + "</div>";
       h += '<div class="t-sub"><span>' + esc(g.topic) + "</span></div></div>";
     } else {
       var sid = S.room.replace("dm:", "");
@@ -1584,11 +1785,11 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
     var h = '<div class="day-div"><span>今天 · 持久命名会话流（尾部增量信封）</span></div>';
     var curGroup = S.room.indexOf("group:") === 0 ? groupOf(S.room) : null;
     if (curGroup) h += roomRulesCard(curGroup);
-    list.forEach(function (m) {
+    list.forEach(function (m, mi) {
       var isMe = m.from === "me";
-      var s = isMe ? { name: "老板 · Owner", short: "我", emoji: "🧑‍💼", hue: 215, model: "Human Owner", scope: "owner" } : (SEATS[m.from] || SEATS["chief-secretary"]);
-      h += '<div class="row ' + (isMe ? "me" : "") + '" id="msg-' + esc(m.id) + '">';
-      h += isMe ? '<div class="av sm" style="--hue:215">🧑‍💼</div>' : '<div data-act="insp-seat" data-seat="' + esc(s.id) + '" style="cursor:pointer">' + avHtml(s, "sm") + "</div>";
+      var s = isMe ? { name: "老板 · Owner", short: "我", emoji: "\uD83E\uDDD1\u200D\uD83D\uDCBC", hue: 215, model: "Human Owner", scope: "owner" } : (SEATS[m.from] || SEATS["chief-secretary"]);
+      h += '<div class="row ' + (isMe ? "me" : "") + '" id="msg-' + esc(m.id) + '" style="--k:' + Math.min(mi, 12) + '">';
+      h += isMe ? '<div class="av sm" style="--hue:215">\uD83E\uDDD1\u200D\uD83D\uDCBC</div>' : '<div data-act="insp-seat" data-seat="' + esc(s.id) + '" style="cursor:pointer">' + avHtml(s, "sm") + "</div>";
       h += '<div class="col"><div class="head"><span class="who" data-act="insp-seat" data-seat="' + esc(s.id || "chief-secretary") + '">' + esc(s.name) + "</span>";
       if (!isMe) h += '<span class="role-tag">' + esc(s.model) + " · " + esc(s.scope) + "</span>";
       h += '<span class="tm">' + esc(m.time) + "</span>";
@@ -1613,15 +1814,21 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
       }
 
       if (m.gateCard) {
-        h += '<div class="scard"><div class="sc-head"><div class="sc-title"><span>🚦 分步闸门扣留 · Stage-Gated Holding</span>' + chip(S.step1Accepted ? "Step 2 已解锁派发" : "秘书扣留中 · 0% 泄露", S.step1Accepted ? "ok" : "gold") + '</div><div class="sc-sub">一次交代多步任务时，总秘书只向项目群下发当前阶段，后续阶段严密扣留在秘书备忘录中：</div></div>';
-        h += '<div class="sc-body"><div class="gate">';
-        h += '<div class="gate-step"><div class="ic run">1</div><div class="gm"><b>Step 1 · 仿 PulseChat 极简高帧率 2D 聊天产品界面设计</b><span>已拉起「设计原型」群（@交互设计 @视觉设计 @原型工程 @设计质疑）· v1.1 待验收</span></div>' + chip("进行中", "ok") + "</div>";
-        h += '<div class="gate-step ' + (S.step1Accepted ? "" : "locked") + '"><div class="ic ' + (S.step1Accepted ? "run" : "hold") + '">2</div><div class="gm"><b>Step 2 · Godot 配套 2D 小游戏设计与关卡原型</b><span>' + (S.step1Accepted ? "已解锁并派发 →「Godot项目」群（施工证 MD-0418）" : "🔒 秘书扣留中（Stage-Gated Holding）· 待 Step 1 验收通过后自动立项派发") + '</span></div><button class="btn sm" data-act="held">' + (S.showHeld ? "收起扣留详情" : "查看扣留原文") + "</button></div>";
+        var acc = S.step1Accepted, gAnim = S.gateAnim;
+        h += '<div class="scard" id="gateCard"><div class="sc-head"><div class="sc-title"><span>🚦 分步闸门扣留 · Stage-Gated Holding</span>' + chip(acc ? "Step 2 已解锁派发" : "秘书扣留中 · 0% 泄露", acc ? "ok" : "gold") + '</div><div class="sc-sub">一次交代多步任务时，总秘书只向项目群下发当前阶段，后续阶段严密扣留在秘书备忘录中：</div></div>';
+        h += '<div class="sc-body"><div class="gate-steps">';
+        h += '<div class="step v-ok"><div class="st-idx">' + (acc ? IC.check : "1") + '</div><div><div class="st-title"><b>Step 1 · 仿 PulseChat 极简高帧率 2D 聊天产品界面设计</b>' + chip(acc ? "已验收归档" : "进行中 · v1.1 待验收", "ok") + "</div>";
+        h += '<div class="st-desc">' + fmtText("已拉起「设计原型」群（@交互设计 @视觉设计 @原型工程 @设计质疑）· 施工证 `TASK-0412`") + '</div><div class="st-meta">' + (acc ? "100% · 4/4 门禁全绿 · 老板终审已签字" : "92% · 4/4 门禁全绿 · 等待老板终审") + '</div><div class="bar"><i style="width:' + (acc ? 100 : 92) + '%"></i></div></div></div>';
+        h += '<div class="step ' + (acc ? "v-ok" : "v-warn locked") + (gAnim ? " unlock-anim" : "") + '"><div class="st-idx">' + (acc ? IC.unlock : IC.lock) + '</div><div><div class="st-title"><b>Step 2 · Godot 配套 2D 小游戏设计与关卡原型</b>' + chip(acc ? "已派发 · MD-0418" : "扣留中", acc ? "ok" : "warn") + "</div>";
+        h += '<div class="st-desc">' + (acc ? "已解锁并派发 →「Godot项目」群（施工证 MD-0418）" : "🔒 秘书扣留中（Stage-Gated Holding）· 待 Step 1 验收通过后自动立项派发") + '</div><div class="st-meta">' + (acc ? "实现细则已随施工证下发「Godot项目」群 · 启动进度 12%" : "解锁条件：Step 1 验收通过 · 实现细则对组员不可见") + "</div>";
+        h += '<div class="bar"><i' + (gAnim ? ' data-w="12" style="width:0%"' : ' style="width:' + (acc ? 12 : 100) + '%"') + "></i></div>";
+        h += '<div class="st-act"><button class="btn sm" data-act="held">' + (S.showHeld ? "收起扣留详情" : "查看扣留原文") + "</button>" + (acc ? '<button class="btn sm ghost" data-act="open" data-room="group:godot-project">进入「Godot项目」群 →</button>' : '<button class="btn sm ghost" data-act="open" data-room="group:design-prototype">进入玻璃房查验 Step 1 →</button>') + "</div></div></div>";
+        h += "</div>";
         h += contractHtml();
         if (S.showHeld) {
           h += '<div class="scard" style="margin-top:4px;padding:10px 12px;background:var(--bg-0)"><div class="mono" style="font-size:12px;color:var(--gold)">[秘书加密备忘录 #HOLD-02 · 实现细则组员可见性 0 / 5]</div><div style="font-size:12.5px;color:var(--text-2);margin-top:4px">扣留内容：“等 2D 聊天界面验收后，再由「Godot项目」群接手制作配套 2D 像素小游戏”。「设计原型」群只拿到上面这份只读接口契约（预留挂载点与事件桥签名），Step 2 的玩法、关卡与美术细节一个字都不进群，彻底杜绝注意力稀释与需求串味。</div></div>';
         }
-        h += "</div></div></div>";
+        h += "</div></div>";
       }
 
       if (m.reportCard) {
@@ -1653,7 +1860,7 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
 
       if (m.taskCard) {
         h += '<div class="scard"><div class="sc-head"><div class="sc-title"><span>📋 ' + esc(m.taskCard.id) + "</span>" + chip("Mandate Issued", "accent") + '</div><div class="sc-sub"><b>' + esc(m.taskCard.title) + "</b></div></div>";
-        h += '<div class="sc-body"><div class="mono" style="font-size:12px;color:var(--text-2)">Write-Scope: ' + esc(m.taskCard.scope) + '</div><div style="font-size:12px;color:var(--gold);margin-top:6px">' + esc(m.taskCard.note) + "</div>" + (m.taskCard.contract ? contractHtml() : "") + "</div></div>";
+        h += '<div class="sc-body"><div class="t-scope">' + chip("Write-Scope", "violet", "mono") + '<code title="' + esc(m.taskCard.scope) + '">' + esc(m.taskCard.scope) + '</code></div><div class="t-lock" title="' + esc(m.taskCard.note) + '">' + esc(m.taskCard.note) + "</div>" + (m.taskCard.contract ? contractHtml() : "") + "</div></div>";
       }
 
       if (m.file && FILES[m.file]) {
@@ -1673,6 +1880,14 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
       h += "</div></div></div></div>";
     });
     $("#streamInner").innerHTML = h;
+    if (S.gateAnim) {
+      S.gateAnim = false;
+      var bars = document.querySelectorAll("#streamInner .bar i[data-w]");
+      if (bars.length) void bars[0].getBoundingClientRect();
+      requestAnimationFrame(function () {
+        bars.forEach(function (i) { i.style.width = i.getAttribute("data-w") + "%"; });
+      });
+    }
   }
   function renderOrgView() {
     var h = '<div class="org"><div class="org-top"><div class="info"><h3>🏢 组织架构与 company.json 便携中心 · ' + esc(S.companyName) + '</h3><p>整支虚拟公司（总秘书、部门群、专家人设、模型槽位、分级派活权限）收敛在单个零密钥 <code>company.json</code> 中，支持一键导出、跨宿主导入与自动探测绑定。<br><span style="color:var(--text-3)">本页所有数据与交互均为架构 Demo 演示（静态示例数据）。</span></p></div>';
@@ -1687,25 +1902,37 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
 
     h += '<div class="blk"><div class="blk-head"><h4>🌳 汇报与派活链路（悬停任意节点透视可触达范围）</h4><div class="probe" id="probeLine">悬停任意席位查看 dispatchScope 可触达范围…</div></div>';
     h += '<div class="blk-body"><div class="tree" id="orgTree">';
-    h += '<div class="t-tier"><div class="t-label">Tier 0 · 人类与总调度枢轴</div><div class="t-row">';
-    h += '<div class="t-node sec" data-seat="chief-secretary"><span class="em">👩‍💼</span><div class="nm"><b>助手 · 总秘书</b><span>company_all · google/gemini-4-argon</span></div></div>';
-    h += '<div class="t-node" data-seat="feedback-collector"><span class="em">👂</span><div class="nm"><b>意见收集员</b><span>report_to_secretary_only · 只读哨兵</span></div></div>';
-    h += '<div class="t-node" data-seat="trend-catcher"><span class="em">📱</span><div class="nm"><b>热点捕手</b><span>report_to_secretary_only · 快慢双路哨兵</span></div></div>';
-    h += "</div></div>";
-    h += '<div class="t-tier"><div class="t-label">Tier 1 &amp; 2 · 项目群玻璃房（组长拆包 + 组员互助 + 专职挑刺）</div><div class="t-groups">';
-    GROUPS.forEach(function (g) {
-      h += '<div class="t-grp"><div class="gh"><b>' + esc(g.name) + "</b>" + chip(g.members.length + " 席位", "neutral") + '</div><div class="gm">';
+    var sentNode = function (id, note) {
+      var s = SEATS[id];
+      return '<div class="t-node" data-seat="' + id + '" data-act="insp-seat"><span class="em">' + esc(s.emoji) + '</span><div class="nm"><b>' + esc(s.name) + "</b><span>report_to_secretary_only · " + esc(note) + "</span></div></div>";
+    };
+    var secS = SEATS["chief-secretary"];
+    h += '<div class="t-tier"><div class="t-label">Tier 0 · 人类老板 → 总调度枢轴 ← 只读哨兵</div>';
+    h += '<div class="t-hub solo"><div class="t-node human"><span class="em">\uD83E\uDDD1\u200D\uD83D\uDCBC</span><div class="nm"><b>老板 · Owner</b><span>human · 仅与总秘书 1v1</span></div></div></div>';
+    h += '<div class="t-v"></div>';
+    h += '<div class="t-hub"><div class="side l">' + sentNode("feedback-collector", "只读哨兵") + '<span class="t-h" title="只读上报"></span></div>';
+    h += '<div class="t-node sec" data-seat="chief-secretary" data-act="insp-seat"><span class="em">' + esc(secS.emoji) + '</span><div class="nm"><b>' + esc(secS.name) + "</b><span>company_all · " + esc(secS.model) + "</span></div></div>";
+    h += '<div class="side r"><span class="t-h" title="只读上报"></span>' + sentNode("trend-catcher", "快慢双路哨兵") + "</div></div></div>";
+    h += '<div class="t-mid"><span class="t-label">Tier 1 &amp; 2 · 项目群玻璃房（组长拆包 + 组员互助 + 专职挑刺）</span></div>';
+    h += '<div class="t-groups2">';
+    var lastRowFrom = GROUPS.length - (GROUPS.length % 2 === 0 ? 2 : 1);
+    GROUPS.forEach(function (g, gi) {
+      var gm = GOV[g.mode];
+      h += '<div class="t-grp' + (gi >= lastRowFrom ? " last-row" : "") + '"><div class="gh"><b><span class="emo">🏛️</span>' + esc(g.name) + '</b><span class="gh-tags">' + chip(esc(g.mode), gm.v, "mono") + chip(g.members.length + " 席位", "neutral") + '</span></div><div class="gm">';
       g.members.filter(function (id) { return id !== "chief-secretary"; }).forEach(function (id) {
         var s = SEATS[id];
         if (!s) return;
-        h += '<div class="t-node" data-seat="' + esc(s.id) + '" data-act="insp-seat"><span class="em">' + esc(s.emoji) + '</span><div class="nm"><b>' + esc(s.name) + "</b><span>" + esc(s.scope) + " · " + esc(s.model) + "</span></div></div>";
+        var role = id === g.lead ? '<span class="role lead">组长</span>' : (id === g.critic ? '<span class="role critic">质疑</span>' : "");
+        h += '<div class="t-node" data-seat="' + esc(s.id) + '" data-act="insp-seat" title="' + esc(s.model) + '"><span class="em">' + esc(s.emoji) + '</span><div class="nm"><b>' + esc(s.name) + "</b><span>" + esc(s.scope) + "</span></div>" + role + "</div>";
       });
       h += "</div></div>";
     });
-    h += "</div></div></div></div></div>";
+    h += "</div></div>";
+    h += '<div class="legend"><span><i class="solid"></i>派活 / 汇报链路</span><span><i class="dash"></i>只读哨兵 · 仅向总秘书上报</span><span><i style="background:var(--ok)"></i>悬停：可触达席位</span><span><i style="background:var(--accent)"></i>组长</span><span><i style="background:var(--warn)"></i>专职质疑</span></div>';
+    h += "</div></div>";
 
     h += '<div class="blk"><div class="blk-head"><h4>🛡️ 分级派活权限矩阵（Hierarchical Dispatch Matrix）</h4></div><div class="blk-body" style="padding:0"><table class="mtx"><thead><tr><th>角色层级</th><th>dispatchScope</th><th>可唤醒与派活目标</th><th>文件写入与施工证策略</th></tr></thead><tbody>';
-    h += '<tr><td><b>👩‍💼 总秘书 (Chief Secretary)</b></td><td><code>company_all</code></td><td>全公司所有群组与全体常驻席位</td><td>签发 / 回收施工证（Mandate），扣留多阶段后续步骤；低风险小改 <code>direct_scoped_write</code> 当场改完，耗时单兵任务 <code>spawn_async_subagent</code> 后台挂起</td></tr>';
+    h += '<tr><td><b><span class="emo">\uD83D\uDC69\u200D\uD83D\uDCBC</span> 总秘书 (Chief Secretary)</b></td><td><code>company_all</code></td><td>全公司所有群组与全体常驻席位</td><td>签发 / 回收施工证（Mandate），扣留多阶段后续步骤；低风险小改 <code>direct_scoped_write</code> 当场改完，耗时单兵任务 <code>spawn_async_subagent</code> 后台挂起</td></tr>';
     h += '<tr><td><b>🧭 项目群组长 (Group Lead)</b></td><td><code>group_internal</code></td><td>仅限本项目群内部成员拆包与催办</td><td>维护本群任务黑板，协调组内施工证流转</td></tr>';
     h += '<tr><td><b>🔎 专职质疑 / QA (Critic)</b></td><td><code>group_review</code></td><td>本群执行席位（定点打回返工或签发 PASS）</td><td>只读检索 + 运行真实探针，严禁直接代写业务产物</td></tr>';
     h += '<tr><td><b>⚡ 专家执行席位 (Specialist)</b></td><td><code>peer_assist</code></td><td>同群搭档对接口互助，完活汇报组长/秘书</td><td>持有激活态 Mandate 期间解锁对应路径写权限</td></tr>';
@@ -1735,14 +1962,23 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
     h += '</div><div class="rd-note">导出的 company.json 只带人设、槽位与权限，绝对路径、密钥和会话转录一律不出门。</div></div></div>';
     h += '<div class="blk"><div class="blk-head"><h4>📸 Git 快照与伴生巡检</h4>' + chip("可回滚", "accent") + '</div><div class="blk-body"><div class="envlp">git_snapshot_ref: rev-parse HEAD → 3f9c2e1<br>stash create → 8a41d07（不污染工作区）<br>checkpoint_step: sqlite · step-1/accepted</div><div class="rd-note">ephemeral_task_watchdog：只为后台单兵（如 bg-7f3a）挂伴生巡检，心跳超时自动回收并回报总秘书；direct_exec 不挂巡检。</div></div></div></div>';
 
-    h += '<div class="blk"><div class="blk-head"><h4>🔌 五大宿主自动探测与槽位绑定（Harness Adapter Binding）</h4><button class="btn sm" data-act="probe">重新探测宿主环境</button></div><div class="blk-body"><div class="hosts" id="hostList">';
-    HOSTS.forEach(function (hs) {
-      h += '<div class="host"><div class="ht"><b>' + esc(hs.name) + '</b><span class="h-st ' + (hs.status === "bound" ? "bound" : "probing") + '">' + (hs.status === "bound" ? "● 已绑定 " + hs.lat : "◌ 探测中…") + "</span></div>";
-      h += '<div class="hm"><div>Adapter: ' + esc(hs.ver) + "</div><div>Model: <code>" + esc(hs.model) + "</code></div></div></div>";
-    });
-    h += "</div></div></div></div>";
+    h += '<div class="blk"><div class="blk-head"><h4>🔌 五大宿主自动探测与槽位绑定（Harness Adapter Binding）</h4><button class="btn sm" data-act="probe">重新探测宿主环境</button></div><div class="blk-body"><div class="hosts" id="hostList">' + hostsHtml() + "</div></div></div></div>";
     $("#streamInner").innerHTML = h;
     bindOrgHover();
+  }
+
+  var HOST_LOGO = { openclaw: ["OC", "#FF7A59", "#D9412F"], dsh: ["DSH", "#5B8CFF", "#2747C9"], pi: ["Pi", "#34D399", "#0E8A5F"], opencode: ["&lt;/&gt;", "#6B7385", "#222833"], hermes: ["H", "#B79CFF", "#6A48D7"] };
+  function hostsHtml() {
+    return HOSTS.map(function (hs) {
+      var lg = HOST_LOGO[hs.id] || [esc(hs.name.slice(0, 2)), "#7D8696", "#3A404B"];
+      var st = hs.status === "bound" ? "bound" : "scanning";
+      var h = '<div class="host' + (st === "scanning" ? " scanning" : "") + '"><div class="h-top"><span class="h-logo" style="--l1:' + lg[1] + ";--l2:" + lg[2] + '" aria-hidden="true">' + lg[0] + '</span><span class="nm"><b>' + esc(hs.name) + "</b><small>" + esc(hs.ver) + "</small></span></div>";
+      h += '<div class="h-st ' + st + '"><span><i></i>' + (st === "bound" ? "已绑定" : "探测中…") + '</span><span class="lat">' + (st === "bound" ? esc(hs.lat) : "—") + "</span></div>";
+      h += '<div class="slots">' + hs.model.split(" + ").map(function (m, k) {
+        return '<div class="slot" title="' + (k ? "fallback" : "primary") + " → " + esc(m) + '"><span class="sk' + (k ? " fb" : "") + '">' + (k ? "备" : "主") + "</span><code>" + esc(m.split("/")[1] || m) + "</code></div>";
+      }).join("") + "</div></div>";
+      return h;
+    }).join("");
   }
 
   function bindOrgHover() {
@@ -1787,35 +2023,90 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
     return peers.length ? peers : ["chief-secretary"];
   }
 
+  var GLOBAL_AGENTS_TOK = 18.6;
+  var KV_C = 2 * Math.PI * 42;
+  function prefixTok(s) {
+    if (s.prefixBase == null) s.prefixBase = Math.max(2.4, (parseFloat(s.prefixTokens) || 12) - (s.inheritGlobalAgentsMd ? GLOBAL_AGENTS_TOK : 0));
+    return s.prefixBase + (s.inheritGlobalAgentsMd ? GLOBAL_AGENTS_TOK : 0);
+  }
+  function fmtK(n) { return n.toFixed(1) + "k"; }
+  function seqOf(s) {
+    if (s.id === "chief-secretary") return S.pig.head;
+    if (S.pig.cur[s.id] != null) return S.pig.cur[s.id];
+    return 31 + ((s.hue || 0) % 17);
+  }
+  function kvLevel(v) { return v >= 85 ? "" : (v >= 60 ? "mid" : "low"); }
+  function kvStateHtml(s) {
+    return s.kvCold
+      ? "⚠️ 前缀失效 · " + esc(s.kvCold) + " → 冷启动重建中…"
+      : "✓ 前缀热缓存 · 人设 + 岗位规则 + 工具定义字节级锁定";
+  }
+  function paintKv(s) {
+    var val = $("#kvVal"), arc = $("#kvArc"), g = $("#kvGauge"), st = $("#kvState");
+    if (!val || !s) return;
+    val.textContent = s.kvHit.toFixed(1) + "%";
+    if (arc) arc.style.strokeDasharray = (KV_C * s.kvHit / 100).toFixed(2) + " " + KV_C.toFixed(2);
+    if (g) g.setAttribute("class", "gauge " + kvLevel(s.kvHit));
+    if (st) { st.className = "kv-state" + (s.kvCold ? " cold" : ""); st.innerHTML = kvStateHtml(s); }
+  }
+  function kvColdStart(s, reason) {
+    if (!s) return;
+    clearTimeout(s.kvT);
+    s.kvCold = reason;
+    s.kvTarget = 90.6 + Math.random() * 3.2;
+    s.kvHit = 6 + Math.random() * 6;
+    var arc = $("#kvArc");
+    if (arc && S.insp === s.id) { void arc.getBoundingClientRect(); paintKv(s); }
+    var step = function () {
+      s.kvHit += (s.kvTarget - s.kvHit) * 0.22;
+      if (s.kvTarget - s.kvHit < 0.3) { s.kvHit = s.kvTarget; s.kvCold = null; }
+      if (S.insp === s.id) paintKv(s);
+      if (s.kvCold) s.kvT = setTimeout(step, 260);
+    };
+    s.kvT = setTimeout(step, 760);
+  }
+
   function renderInspector() {
     var s = SEATS[S.insp] || SEATS["chief-secretary"];
+    var stTxt = s.canWrite === false ? "只读哨兵" : (s.status === "reviewing" ? "审查中" : (s.status === "working" ? "在线 · 工作中" : "在线 · 待命"));
+    var stV = s.canWrite === false ? "neutral" : (s.status === "reviewing" ? "warn" : "ok");
+    var fbs = s.fallbacks || (s.fallbacks = []);
+    var pt = prefixTok(s);
     var h = '<div class="in-head"><div><h3>角色配置与透视</h3><p>Persona × Model 解耦 · 实时生效</p></div><button class="icon-btn" data-act="insp-toggle" aria-label="收起抽屉">×</button></div>';
     h += '<div class="in-body">';
 
-    h += '<div class="in-hero"><div class="top">' + avHtml(s, "lg") + '<div class="title"><h4>' + esc(s.name) + "</h4><p>" + esc(s.en) + " · " + esc(s.dept) + "</p><div class=\"badges\">" + chip(esc(s.id), "neutral", "mono") + chip("thinking: " + esc(s.thinking), "violet", "mono") + (s.canWrite ? chip("可持证写盘", "ok") : chip("纯只读哨兵", "warn")) + "</div></div></div></div>";
+    h += '<div class="box id-box" style="--hue:' + (s.hue || 210) + '"><div class="id-card">' + avHtml(s, "xl") + '<div class="meta"><b>' + esc(s.name) + '</b><span class="en">' + esc(s.en) + '</span><div class="seat-id">seatId: ' + esc(s.id) + " · thinking: " + esc(s.thinking) + '</div><div class="line">' + chip(esc(s.dept || "—"), "neutral") + chip(stTxt, stV) + (s.canWrite ? chip("可持证写盘", "violet") : chip("纯只读", "warn")) + "</div></div></div></div>";
 
-    h += '<div class="in-sec"><div class="sh"><span>🎭 人格设定 · Persona (与底层模型解耦)</span>' + chip("Decoupled", "accent") + "</div>";
-    h += '<textarea class="persona-box" data-act="persona">' + esc(s.persona) + "</textarea>";
-    h += '<div class="trow"><div class="t-txt"><b>继承全局 AGENTS.md</b><span><code>inheritGlobalAgentsMd</code> · 是否注入宿主全局规则</span></div><button class="toggle" role="switch" data-act="t-inherit" aria-checked="' + (s.inheritGlobalAgentsMd ? "true" : "false") + '"></button></div>';
+    h += '<div class="in-sec"><div class="sh"><span>🎭 Persona 人格 ⟷ Model 模型</span>' + chip("Decoupled", "accent") + "</div>";
+    h += '<div class="decouple"><div class="dc persona"><span class="ov">Persona · 人格</span><p id="personaSum">' + esc(s.persona) + '</p><button class="btn sm" data-act="focus-persona">✎ 编辑人格</button></div>';
+    h += '<div class="dc-link" aria-hidden="true"><i class="dc-arrow">⟷</i><span>解耦</span></div>';
+    h += '<div class="dc model"><span class="ov">Model · 模型</span><span class="dc-model">' + esc(s.model) + "</span><small>" + (s.kvCold ? "刚换模 · 人设前缀原样保留" : "换模不换人设 · 人格前缀不变") + "</small>" + chip("fallback × " + fbs.length, "violet", "mono") + "</div></div>";
+    h += '<textarea class="persona-box" id="personaInput" data-act="persona" rows="4" aria-label="编辑人格设定">' + esc(s.persona) + "</textarea>";
+    h += '<div class="trow"><div class="t-txt"><b>继承全局 AGENTS.md</b><span><code>inheritGlobalAgentsMd</code> · <span class="tok-est">' + (s.inheritGlobalAgentsMd ? fmtK(s.prefixBase) + " → " + fmtK(pt) + " tok" : fmtK(pt) + " tok · 仅岗位规则") + '</span></span></div><button class="toggle" role="switch" data-act="t-inherit" aria-label="继承全局 AGENTS.md" aria-checked="' + (s.inheritGlobalAgentsMd ? "true" : "false") + '"></button></div>';
     h += '<div class="trow"><div class="t-txt"><b>独立岗位规则路径</b><span><code>' + esc(s.rulesPath) + "</code></span></div>" + chip("Mounted", "ok", "mono") + "</div></div>";
 
+    var chev = '<svg class="ic" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>';
     h += '<div class="in-sec"><div class="sh"><span>🧠 模型槽位与容灾链 · Model &amp; Fallbacks</span></div>';
-    h += '<label style="font-size:11.5px;color:var(--text-3)">默认主模型 (Default Model)</label>';
-    h += '<div class="select-wrap"><select data-act="model">';
+    h += '<label class="ov" for="modelSelect">默认主模型 · Default Model</label>';
+    h += '<div class="select-wrap"><select id="modelSelect" data-act="model">';
     MODELS.forEach(function (m) {
       h += '<option value="' + esc(m) + '"' + (s.model === m ? " selected" : "") + ">" + esc(m) + "</option>";
     });
     if (MODELS.indexOf(s.model) === -1) h += '<option value="' + esc(s.model) + '" selected>' + esc(s.model) + "</option>";
-    h += "</select></div>";
-    h += '<div style="font-size:11.5px;color:var(--text-3);margin-top:4px">自动容灾备用链 (Fallback Chain)</div><div class="fb-list">';
-    (s.fallbacks || []).forEach(function (fb, idx) {
-      h += '<span class="fb-chip"><span>#' + (idx + 1) + " " + esc(fb) + '</span><button data-act="fb-del" data-idx="' + idx + '" aria-label="移除">×</button></span>';
-    });
-    h += "</div>";
-    h += '<div class="select-wrap fb-add"><select data-act="fb-add"><option value="">＋ 追加备用模型到 Fallback 链…</option>';
-    MODELS.forEach(function (m) { h += '<option value="' + esc(m) + '">+ ' + esc(m) + "</option>"; });
-    h += "</select></div>";
-    h += '<div class="trow"><div class="t-txt"><b>允许单次任务临时覆盖模型</b><span><code>allowTaskModelOverride</code> · 门禁复核时可临时升配</span></div><button class="toggle" role="switch" data-act="t-override" aria-checked="' + (s.allowTaskModelOverride ? "true" : "false") + '"></button></div></div>';
+    h += "</select>" + chev + "</div>";
+    h += '<div class="ov" style="margin-top:4px">Fallback 容灾链 · 按序降级</div>';
+    if (fbs.length) {
+      h += '<ul class="fb-list">' + fbs.map(function (fb, idx) {
+        return '<li><span class="idx">#' + (idx + 1) + "</span><code>" + esc(fb) + '</code><span class="fb-st">' + (idx === 0 ? "首选备援" : "待命") + '</span><button class="icon-btn" data-act="rm-fb" data-idx="' + idx + '" aria-label="从容灾链移除 ' + esc(fb) + '"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></li>';
+      }).join("") + "</ul>";
+    } else {
+      h += '<ul class="fb-list"><li class="fb-empty">尚未配置备用模型，主模型故障时将直接报错。</li></ul>';
+    }
+    h += '<div class="select-wrap fb-add"><select id="addFbSelect" data-act="fb-add" aria-label="追加备用模型"><option value="">＋ 追加备用模型到 Fallback 链…</option>';
+    MODELS.forEach(function (m) { if (fbs.indexOf(m) === -1) h += '<option value="' + esc(m) + '">+ ' + esc(m) + "</option>"; });
+    h += "</select>" + chev + "</div>";
+    h += '<div class="trow"><div class="t-txt"><b>允许单次任务临时覆盖模型</b><span><code>allowTaskModelOverride</code> · 门禁复核时可临时升配</span></div><button class="toggle" role="switch" data-act="t-override" aria-label="允许单次任务临时覆盖模型" aria-checked="' + (s.allowTaskModelOverride ? "true" : "false") + '"></button></div>';
+    h += '<div class="mandate' + (s.mandate && s.allowTaskModelOverride ? "" : " off") + '">🪪 ' + (s.mandate ? "<b>" + esc(s.mandate.id) + "</b> 施工证 · " + (s.allowTaskModelOverride ? "复核时可临时升配 " + chip("→ anthropic/claude-opus-5-5", "violet", "mono") : "已锁定默认模型，不接受任务级覆盖") : "无施工证 · 只读观察席位") + "</div></div>";
 
     h += '<div class="in-sec"><div class="sh"><span>🛡️ 派活权限范围 · dispatchScope</span>' + (s.lockScope ? chip("只读锁定", "warn") : "") + '</div><div class="seg">';
     SCOPES.forEach(function (sc) {
@@ -1836,10 +2127,11 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
     h += '<div class="perm-row">' + MEM_PRIMS.map(function (p) { return chip(esc(p), "violet", "mono"); }).join("") + "</div>";
     h += '<div class="trow"><div class="t-txt"><b>脱敏导出</b><span>绝对路径、密钥与会话转录不进 company.json</span></div>' + chip("sanitized: true", "ok", "mono") + "</div></div>";
 
-    var deg = Math.round((s.kvHit / 100) * 360);
-    h += '<div class="in-sec"><div class="sh"><span>⚡ 持久会话 KV Cache 监控</span>' + chip("Prefix Locked", "ok", "mono") + '</div><div class="kv-box">';
-    h += '<div class="kv-ring" style="--deg:' + deg + 'deg"><span id="kvVal">' + s.kvHit.toFixed(1) + "%</span></div>";
-    h += '<div class="kv-meta"><div class="r"><span>稳定前缀 Tokens</span><b>' + esc(s.prefixTokens) + '</b></div><div class="r"><span>本轮尾部信封增量</span><b style="color:var(--accent)">' + esc(s.deltaTokens) + '</b></div><div class="r"><span>施工证 (Mandate)</span><b>' + (s.mandate ? esc(s.mandate.id) : "无 · 只读观察") + "</b></div></div></div>";
+    var dash = (KV_C * s.kvHit / 100).toFixed(2) + " " + KV_C.toFixed(2);
+    h += '<div class="in-sec"><div class="sh"><span>⚡ 持久会话 KV Cache 命中率</span>' + chip("Prefix Locked", "ok", "mono") + '</div><div class="box kv-box2"><div class="gauge-box">';
+    h += '<div class="gauge ' + kvLevel(s.kvHit) + '" id="kvGauge" role="img" aria-label="KV Cache 命中率"><svg viewBox="0 0 96 96" aria-hidden="true"><circle class="g-bg" cx="48" cy="48" r="42"/><circle class="g-fg" id="kvArc" cx="48" cy="48" r="42" transform="rotate(-90 48 48)" style="stroke-dasharray:' + dash + '"/></svg><div class="g-val"><b id="kvVal">' + s.kvHit.toFixed(1) + "%</b><span>KV HIT</span></div></div>";
+    h += '<div class="kv-rows"><div><span>静态前缀</span><b>' + fmtK(pt) + ' tok</b></div><div><span>尾部增量</span><b style="color:var(--accent)">' + esc(s.deltaTokens) + ' tok</b></div><div><span>lastReadEventSeq</span><b>#' + seqOf(s) + "</b></div><div><span>施工证</span><b>" + (s.mandate ? esc(s.mandate.id) : "—") + "</b></div></div></div>";
+    h += '<div class="kv-state' + (s.kvCold ? " cold" : "") + '" id="kvState">' + kvStateHtml(s) + "</div></div>";
     if (s.mandate) {
       h += '<div style="font-size:11.5px;color:var(--text-2);padding:8px 10px;border-radius:var(--r-sm);background:var(--bg-0);border:1px solid var(--line)">🪪 <b>' + esc(s.mandate.title) + "</b><br><span class=\"mono\" style=\"color:var(--text-3)\">Scope: " + esc(s.mandate.path) + " · " + esc(s.mandate.status) + "<br>git_snapshot_ref · checkpoint_step · ephemeral_task_watchdog</span></div>";
     }
@@ -1960,14 +2252,44 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
     }, 180);
   }
 
+  var THEME_KEY = "axc-theme-user";
+  var themeMq = window.matchMedia ? window.matchMedia("(prefers-color-scheme: light)") : null;
+  var themeT = 0;
+  function systemTheme() { return themeMq && themeMq.matches ? "light" : "dark"; }
+  function applyTheme(t, animate) {
+    var root = document.documentElement;
+    S.theme = t === "light" ? "light" : "dark";
+    if (animate) {
+      root.classList.add("theme-switching");
+      clearTimeout(themeT);
+      themeT = setTimeout(function () { root.classList.remove("theme-switching"); }, 320);
+    }
+    root.setAttribute("data-theme", S.theme);
+    var btn = $("#themeBtn"), label = S.theme === "dark" ? "切换到浅色主题" : "切换到深色主题";
+    btn.innerHTML = S.theme === "dark" ? IC.sun : IC.moon;
+    btn.setAttribute("aria-label", label);
+    btn.title = label + "（与系统一致时自动跟随系统）";
+  }
+  // A manual pin that equals the OS theme is dropped so the page keeps following the OS.
   function setTheme(t) {
-    S.theme = t;
-    document.documentElement.setAttribute("data-theme", t);
-    localStorage.setItem("axc-theme", t);
-    $("#themeBtn").innerHTML = t === "dark" ? IC.sun : IC.moon;
+    applyTheme(t, true);
+    try {
+      if (S.theme === systemTheme()) localStorage.removeItem(THEME_KEY);
+      else localStorage.setItem(THEME_KEY, S.theme);
+    } catch (e) {}
+  }
+  function onSystemTheme(e) {
+    try { localStorage.removeItem(THEME_KEY); } catch (err) {}
+    applyTheme(e.matches ? "light" : "dark", true);
+  }
+  if (themeMq) {
+    if (themeMq.addEventListener) themeMq.addEventListener("change", onSystemTheme);
+    else if (themeMq.addListener) themeMq.addListener(onSystemTheme);
   }
 
+  var roomAnimT = 0;
   function openRoom(rm) {
+    var changed = S.room !== rm;
     S.room = rm;
     if (rm.indexOf("dm:") === 0) S.insp = rm.replace("dm:", "");
     else if (rm.indexOf("group:") === 0) {
@@ -1977,6 +2299,18 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
     S.sbOpen = false;
     $("#app").classList.remove("sb-open");
     renderAll();
+    if (changed) {
+      var st = $("#stream"), inner = $("#streamInner");
+      st.classList.add("instant");
+      void st.offsetHeight;
+      st.scrollTop = 0;
+      st.classList.remove("instant");
+      inner.classList.remove("anim");
+      void inner.offsetWidth;
+      inner.classList.add("anim");
+      clearTimeout(roomAnimT);
+      roomAnimT = setTimeout(function () { inner.classList.remove("anim"); }, 900);
+    }
   }
 
   function renderAll() {
@@ -2031,6 +2365,14 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
       if (!gg || !GOV[gmode] || gg.mode === gmode) return;
       gg.mode = gmode; renderAll();
       toast("「" + gg.name + "」切换为 " + gmode + " · " + GOV[gmode].n);
+    } else if (act === "dept") {
+      var dn = el.getAttribute("data-dept"), nowOpen = el.getAttribute("aria-expanded") !== "true";
+      S.deptClosed[dn] = !nowOpen;
+      el.setAttribute("aria-expanded", String(nowOpen));
+      if (el.nextElementSibling) el.nextElementSibling.classList.toggle("closed", !nowOpen);
+    } else if (act === "focus-persona") {
+      var pi = $("#personaInput");
+      if (pi) { pi.focus(); pi.setSelectionRange(pi.value.length, pi.value.length); pi.scrollIntoView({ block: "nearest" }); }
     } else if (act === "rules-toggle") {
       S.rulesOpen = !S.rulesOpen; renderStream();
     } else if (act === "pig-at") {
@@ -2051,6 +2393,7 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
       }
       renderStream();
     } else if (act === "accept") {
+      if (!S.step1Accepted) S.gateAnim = true;
       S.step1Accepted = true;
       var gGodot = GROUPS.find(function (x) { return x.id === "group:godot-project"; });
       if (gGodot) gGodot.badge = "Step 2 进行中";
@@ -2078,9 +2421,10 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
       closeModal();
     } else if (act === "t-inherit") {
       var s1 = SEATS[S.insp]; s1.inheritGlobalAgentsMd = !s1.inheritGlobalAgentsMd; renderInspector();
+      kvColdStart(s1, s1.inheritGlobalAgentsMd ? "注入全局 AGENTS.md" : "移除全局 AGENTS.md");
     } else if (act === "t-override") {
       var s2 = SEATS[S.insp]; s2.allowTaskModelOverride = !s2.allowTaskModelOverride; renderInspector();
-    } else if (act === "fb-del") {
+    } else if (act === "rm-fb" || act === "fb-del") {
       var idx = Number(el.getAttribute("data-idx"));
       SEATS[S.insp].fallbacks.splice(idx, 1); renderInspector();
     } else if (act === "scope") {
@@ -2114,13 +2458,16 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
       document.body.appendChild(a); a.click(); a.remove();
       toast("已导出 company.json");
     } else if (act === "probe") {
-      HOSTS.forEach(function (h) { h.status = "probing"; });
-      renderOrgView();
-      setTimeout(function () {
-        HOSTS.forEach(function (h) { h.status = "bound"; });
-        if (S.room === "org") renderOrgView();
-        toast("5 大宿主环境探测完成，模型槽位已全部绑定");
-      }, 600);
+      var paintHosts = function () { var hl = $("#hostList"); if (hl && S.room === "org") hl.innerHTML = hostsHtml(); };
+      HOSTS.forEach(function (hs) { hs.status = "probing"; });
+      paintHosts();
+      HOSTS.forEach(function (hs, i) {
+        setTimeout(function () {
+          hs.status = "bound";
+          paintHosts();
+          if (i === HOSTS.length - 1) toast("5 大宿主环境探测完成，模型槽位已全部绑定");
+        }, 420 + i * 240);
+      });
     } else if (act === "send") {
       sendMessage();
     }
@@ -2131,6 +2478,7 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
     var act = el.getAttribute("data-act");
     if (act === "model") {
       SEATS[S.insp].model = el.value; renderAll();
+      kvColdStart(SEATS[S.insp], "默认模型切换");
     } else if (act === "fb-add" && el.value) {
       var s = SEATS[S.insp];
       if (s.fallbacks.indexOf(el.value) === -1) s.fallbacks.push(el.value);
@@ -2142,6 +2490,12 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
     }
   });
 
+  document.addEventListener("input", function (ev) {
+    if (ev.target.id !== "personaInput" || !SEATS[S.insp]) return;
+    SEATS[S.insp].persona = ev.target.value;
+    var sum = $("#personaSum");
+    if (sum) sum.textContent = ev.target.value;
+  });
   $("#search").addEventListener("input", function (ev) {
     S.search = ev.target.value; renderSidebar();
   });
@@ -2156,17 +2510,17 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
   setInterval(function () {
     if (document.hidden) return;
     Object.keys(SEATS).forEach(function (k) {
+      if (SEATS[k].kvCold) return;
       var d = (Math.random() - 0.48) * 0.18;
       SEATS[k].kvHit = Math.max(89.5, Math.min(96.8, SEATS[k].kvHit + d));
     });
-    var kvEl = $("#kvVal");
-    if (kvEl && SEATS[S.insp]) kvEl.textContent = SEATS[S.insp].kvHit.toFixed(1) + "%";
+    if (SEATS[S.insp] && !SEATS[S.insp].kvCold) paintKv(SEATS[S.insp]);
   }, 2800);
 
   document.querySelector('[data-act="attach"]').innerHTML = IC.clip;
   document.querySelector('[data-act="voice"]').innerHTML = IC.mic;
   $("#sendBtn").innerHTML = IC.send;
-  setTheme(S.theme);
+  applyTheme(S.theme, false);
   if (location.hash === "#b") S.room = "group:design-prototype";
   else if (location.hash === "#c") S.room = "org";
   renderAll();
