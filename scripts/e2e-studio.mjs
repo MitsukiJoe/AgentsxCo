@@ -37,8 +37,8 @@ await page.waitForSelector(".pinned");
 // Sidebar
 check("置顶总秘书席位含金色星标", await page.locator(".pinned .star").count() === 1 && (await page.textContent(".pinned")).includes("助手 · 总秘书"));
 const groupRows = await page.locator('.sb-row[data-room^="group:"]').allTextContents();
-const expectGroups = [["设计原型", "+3"], ["Issue分诊台", "+4"], ["部署审查", "+4"], ["产品调研", "+4"], ["Godot项目", "+3"]];
-check("五个项目群及堆叠头像计数", expectGroups.every(([n, c]) => groupRows.some((t) => t.includes(n) && t.includes(c))), groupRows.length + " rows");
+const expectGroups = [["设计原型", "+3"], ["自媒体热点捕手", "+3"], ["Issue分诊台", "+4"], ["部署审查", "+4"], ["产品调研", "+4"], ["Godot项目", "+3"]];
+check("六个项目群（含热点捕手）及堆叠头像计数", expectGroups.every(([n, c]) => groupRows.some((t) => t.includes(n) && t.includes(c))), groupRows.length + " rows");
 check("项目群未读蓝点", await page.locator('.sb-row[data-room="group:design-prototype"] .unread').count() === 1);
 const sbText = await page.textContent("#sbList");
 check("部门与专职员工分组", ["原型设计师", "原型工程", "视觉设计", "设计质疑", "交互设计", "情报哨所", "意见收集员"].every((t) => sbText.includes(t)));
@@ -51,7 +51,18 @@ check("场景 A：分步闸门扣留状态条", a.includes("Stage-Gated Holding"
 check("场景 A：收集员 → 秘书二审卡", a.includes("意见收集员 → 秘书二审过滤") && a.includes("源意见出处") && a.includes("秘书完善建议") && await page.locator('.opt[data-act="report"]').count() === 3);
 await page.click('[data-act="held"]');
 check("场景 A：查看扣留原文", (await page.textContent("#streamInner")).includes("组员可见性 0 / 5"));
+const aGate = await page.textContent("#streamInner");
+check("场景 A：闸门透传只读接口契约", aGate.includes("Read-Only Interface Contract") && aGate.includes("#game-overlay-root") && aGate.includes("严禁提前编写 Step 2 代码"));
+check("场景 A：总秘书直接执行卡", aGate.includes("© 2026") && aGate.includes("direct_scoped_write") && aGate.includes("spawn_async_subagent") && aGate.includes("bg-7f3a"));
+check("场景 A：哨兵情报卡 3 套预设", (await page.locator(".rd-tab").count()) === 3 && aGate.includes("自媒体热点捕手") && aGate.includes("report_to_secretary_only"));
+await page.click('.rd-tab[data-i="1"]');
+const aR1 = await page.textContent("#streamInner");
+await page.click('.rd-tab[data-i="0"]');
+check("场景 A：切换哨兵预设", aR1.includes("研发反馈哨") && (await page.getAttribute('.rd-tab[data-i="0"]', "aria-pressed")) === "true");
 if (shots) await page.screenshot({ path: path.join(shotDir, "studio-a-dark.png") });
+await page.click('.opt[data-act="topic"][data-k="1"]');
+const aT = await page.textContent("#streamInner");
+check("场景 A：点选选题派单进热点捕手群", aT.includes("派进「自媒体热点捕手」群") && aT.includes("solo_fast") && (await page.locator('.sb-row[data-room="group:viral-radar"] .unread').count()) === 1);
 await page.click('.opt[data-act="report"][data-k="1"]');
 await page.waitForFunction(() => document.querySelector("#streamInner").textContent.includes("M13"), null, { timeout: 4000 });
 check("场景 A：点选方案 1 后秘书转化为任务", true);
@@ -83,6 +94,38 @@ check("场景 B：点击胶囊跳转并收起", (await page.locator("#newPill.sh
 await page.click('.file[data-file="IA_STATE_MAP.md"]');
 check("文件卡片预览弹窗", (await page.textContent("#modal")).includes("§10 消息状态机"));
 await page.keyboard.press("Escape");
+check("场景 B：任务卡随 Step 1 透传接口契约", b.includes("#game-overlay-root") && b.includes("随 Step 1 透传"));
+check("场景 B：群制度门禁卡 + 事件序号", (await page.locator(".room-rules").count()) === 1 && (await page.locator(".seq-tag").count()) >= 9 && (await page.textContent("#mHead")).includes("adaptive"));
+await page.click('.room-rules [data-act="gov"][data-mode="strict_pipeline"]');
+const bStrict = (await page.textContent("#mHead")).includes("strict_pipeline") && (await page.textContent(".room-rules")).includes("总秘书终审");
+await page.click('.room-rules [data-act="gov"][data-mode="adaptive"]');
+check("场景 B：三档门禁切换", bStrict && (await page.textContent("#mHead")).includes("adaptive"));
+const pigBefore = await page.textContent(".room-rules");
+await page.click('[data-act="pig-at"][data-seat="visual-designer"]');
+const pigMid = await page.textContent(".room-rules");
+await page.waitForTimeout(1100);
+const pigAfter = await page.textContent(".room-rules");
+check("场景 B：未被 @ 不推进游标", pigBefore.includes("lastReadEventSeq #49") && pigBefore.includes("待消费 +3"));
+check("场景 B：点名后消费 Turn Delta Envelope 再提交游标", pigMid.includes("游标未提交") && pigMid.includes("lastReadEventSeq #49") && pigAfter.includes("#49 → #52") && pigAfter.includes("lastReadEventSeq #52"));
+if (shots) await page.locator(".room-rules").screenshot({ path: path.join(shotDir, "studio-b-rules-dark.png") });
+
+// Viral radar room
+await page.click('.sb-row[data-room="group:viral-radar"]');
+await page.waitForTimeout(200);
+const vr = await page.textContent("#streamInner");
+check("热点捕手群：solo_fast + Fast Path 粗筛流", vr.includes("solo_fast") && (await page.locator(".rd-feed .fi.drop").count()) > 0 && (await page.locator(".rd-feed .fi.keep").count()) > 0 && vr.includes("派单"));
+await page.click('.rd-tab[data-i="2"]');
+check("热点捕手群：切到竞品盯盘哨", (await page.textContent("#streamInner")).includes("竞品盯盘哨"));
+await page.click('.rd-tab[data-i="0"]');
+if (shots) await page.screenshot({ path: path.join(shotDir, "studio-radar-dark.png") });
+
+// Chief secretary inspector
+await page.click('.pinned[data-room="dm:chief-secretary"]');
+await page.waitForTimeout(200);
+const insSec = await page.textContent("#inspector");
+check("抽屉：总秘书直接执行权", insSec.includes("Direct Execution") && insSec.includes("direct_scoped_write") && insSec.includes("spawn_async_subagent"));
+await page.selectOption('select[data-act="mem-sel"]', "reme");
+check("抽屉：记忆底座切换 + 脱敏导出", (await page.inputValue('select[data-act="mem-sel"]')) === "reme" && (await page.textContent("#memSec")).includes("sanitized: true"));
 
 // Inspector on an employee
 await page.click('.sb-row[data-room="dm:design-critic"]');
@@ -113,6 +156,12 @@ await page.waitForTimeout(200);
 const c = await page.textContent("#streamInner");
 check("场景 C：组织架构 + 权限矩阵", c.includes("汇报与派活链路") && c.includes("分级派活权限矩阵") && c.includes("company_all"));
 check("场景 C：五大宿主绑定", ["OpenClaw", "DSH", "Pi", "OpenCode", "Hermes"].every((h) => c.includes(h)));
+check("场景 C：项目级三档门禁", (await page.locator("#govBlk .gov-item").count()) === 6 && c.includes("strict_pipeline") && c.includes("solo_fast"));
+check("场景 C：记忆底座 5 驱动（抽屉选择同步）", (await page.locator("#memBlk .prov").count()) === 5 && (await page.textContent("#memBlk .prov.on")).includes("ReMe"));
+await page.click('#memBlk .prov[data-id="memsearch"]');
+check("场景 C：切换记忆驱动", (await page.textContent("#memBlk .prov.on")).includes("memsearch") && (await page.inputValue('select[data-act="mem-sel"]')) === "memsearch");
+check("场景 C：脱敏导出契约", (await page.textContent("#sanBlk")).includes("sanitized: true") && (await page.textContent("#sanBlk")).includes("${WORKSPACE}"));
+check("场景 C：Demo 演示标注", c.includes("架构 Demo 演示"));
 await page.hover('#orgTree [data-seat="feedback-collector"]');
 check("场景 C：悬停透视派活范围", (await page.textContent("#probeLine")).includes("可触达 1 个席位"));
 if (shots) { await page.mouse.move(5, 5); await page.screenshot({ path: path.join(shotDir, "studio-c-dark.png") }); }
@@ -120,6 +169,7 @@ await page.click('[data-act="json-preview"]');
 const preview = await page.textContent("#modal pre");
 const parsed = JSON.parse(preview);
 check("场景 C：company.json 预览可解析", parsed.chiefSecretary.dispatchScope === "company_all" && parsed.employees.length >= 15);
+check("场景 C：company.json v1.1 字段", parsed.sanitized === true && parsed.memoryAdapter.activeProvider === "memsearch" && parsed.chiefSecretary.permissions.includes("direct_scoped_write") && parsed.governance.projectOverrides["group:viral-radar"] === "solo_fast" && parsed.stageGatePolicy.readOnlyContract.mountPoint === "#game-overlay-root" && parsed.sentinelPresets.length === 3);
 await page.click('#modal [data-act="modal-close"]');
 await page.click('[data-act="probe"]');
 await page.waitForTimeout(2600);
@@ -139,6 +189,18 @@ if (shots) {
   await page.click('.sb-row[data-room="group:design-prototype"]');
   await page.waitForTimeout(400);
   await page.screenshot({ path: path.join(shotDir, "studio-b-light.png") });
+  await page.locator(".room-rules").screenshot({ path: path.join(shotDir, "studio-b-rules-light.png") });
+  await page.click('.pinned[data-room="dm:chief-secretary"]');
+  await page.waitForTimeout(300);
+  await page.locator(".rd-tabs").first().scrollIntoViewIfNeeded();
+  await page.screenshot({ path: path.join(shotDir, "studio-a-light.png") });
+  await page.click('.sb-row[data-room="group:viral-radar"]');
+  await page.waitForTimeout(300);
+  await page.screenshot({ path: path.join(shotDir, "studio-radar-light.png") });
+  await page.click('.sb-row[data-room="org"]');
+  await page.waitForTimeout(300);
+  await page.locator("#govBlk").scrollIntoViewIfNeeded();
+  await page.screenshot({ path: path.join(shotDir, "studio-c-light.png") });
 }
 
 // Mobile
@@ -176,6 +238,41 @@ if (fs.existsSync(path.join(root, "docs/index.html"))) {
   await site.waitForTimeout(5200);
   check("官网：终端演示播放完成", (await site.textContent("#term")).includes("Studio"));
   if (shots) await site.screenshot({ path: path.join(shotDir, "site-hero-dark.png") });
+
+  await site.click('#snTabs [data-act="sn"][data-i="1"]');
+  const snSwitched = (await site.getAttribute('#snTabs [data-act="sn"][data-i="1"]', "aria-pressed")) === "true";
+  await site.click('#snTabs [data-act="sn"][data-i="0"]');
+  await site.waitForTimeout(2400);
+  check("官网：哨兵预设切换 + Fast/Slow 管线", snSwitched && (await site.textContent("#snPipe")).length > 40);
+  await site.click('#snOut [data-act="sn-pick"][data-k="1"]');
+  check("官网：选题点选派单", (await site.textContent("#snOut")).includes("已派单"));
+  await site.click('#govCard [data-act="gov"][data-mode="strict_pipeline"]');
+  const govStrict = (await site.textContent("#execCard")).includes("MD-0421");
+  await site.click('#govCard [data-act="gov"][data-mode="adaptive"]');
+  let sawAsync = false;
+  for (const i of [0, 1, 2]) {
+    const btn = site.locator(`#govCard [data-act="gov-ask"][data-i="${i}"]`);
+    if (await btn.count()) { await btn.click(); if ((await site.textContent("#execCard")).includes("bg-7f3a")) sawAsync = true; }
+  }
+  check("官网：三档门禁与三态路由", govStrict && sawAsync);
+  const pigB = await site.textContent("#pigCard");
+  await site.click('#pigCard [data-act="pig-at"][data-m="eng"]');
+  await site.waitForTimeout(1100);
+  const pigA = await site.textContent("#pigCard");
+  check("官网：捷带唤醒消费后提交游标", pigB.includes("#41") && pigA.includes("toSeq: 46") && (await site.locator("#pigCard .cur.woke").count()) === 1);
+  check("官网：闸门契约 + 记忆底座 + 脱敏", (await site.textContent("#gateCard")).includes("#game-overlay-root") && (await site.locator('#memCard [data-act="mem"]').count()) === 5 && (await site.textContent("#sanCard")).includes("sanitized"));
+  check("官网：Demo 演示标注", (await site.textContent("footer")).includes("架构 Demo 演示"));
+  if (shots) {
+    for (const id of ["sentry", "runtime"]) await site.locator("#" + id).screenshot({ path: path.join(shotDir, `site-${id}-dark.png`) });
+  }
+  await site.click('[data-act="lang"]');
+  check("官网：新 section 英文文案", /Beyond code/.test(await site.textContent("#sentry h2")) && /[A-Za-z]/.test(await site.textContent("#pigCard h3")));
+  await site.click('[data-act="theme"]');
+  if (shots) {
+    for (const id of ["sentry", "runtime"]) await site.locator("#" + id).screenshot({ path: path.join(shotDir, `site-${id}-light-en.png`) });
+  }
+  await site.click('[data-act="lang"]');
+  await site.click('[data-act="theme"]');
   const siteM = await newPage({ width: 390, height: 844 });
   await siteM.goto(siteUrl);
   const ov2 = await siteM.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);

@@ -844,6 +844,104 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
 .kv-meta { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; font-size: 12px; }
 .kv-meta .r { display: flex; align-items: center; justify-content: space-between; gap: 8px; color: var(--text-3); }
 .kv-meta .r b { font-family: var(--font-mono); font-size: 11.5px; color: var(--text-1); }
+/* ---------- v1.1 evolution: radar, governance, piggyback, memory ---------- */
+.seq-tag { font-family: var(--font-mono); font-size: 10.5px; color: var(--text-3); }
+.rd-note { font-size: 11.5px; color: var(--text-3); line-height: 1.55; }
+.contract { padding: 10px 12px; border-radius: 10px; background: var(--tint-accent); border: 1px solid var(--edge-accent); font-size: 12.5px; color: var(--text-2); line-height: 1.6; }
+.contract .t { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 4px; font-size: 12px; font-weight: 650; color: var(--accent); }
+.contract code { padding: 1px 5px; border-radius: 5px; font-size: 11.5px; color: var(--text-1); background: var(--bg-2); border: 1px solid var(--line); }
+.contract b { color: var(--text-1); }
+.room-rules { margin-bottom: 6px; }
+.room-rules .sc-title > span:last-child { display: inline-flex; align-items: center; gap: 6px; }
+.mode-seg { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.mode-btn { min-width: 0; display: flex; flex-direction: column; gap: 1px; padding: 8px 10px; border-radius: 10px; text-align: left; background: var(--bg-2); border: 1px solid var(--line); transition: border-color var(--dur-1), background var(--dur-1), box-shadow var(--dur-2); }
+.mode-btn:hover { border-color: var(--line-strong); }
+.mode-btn code { font-size: 10.5px; color: var(--text-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mode-btn b { font-size: 12.5px; font-weight: 620; }
+.mode-btn.on { border-color: var(--edge-accent); background: var(--accent-soft); box-shadow: 0 0 0 3px var(--accent-soft); }
+.mode-btn.on code { color: var(--accent); }
+.mode-btn.m-strict.on { border-color: var(--edge-danger); background: var(--tint-danger); box-shadow: 0 0 0 3px var(--tint-danger); }
+.mode-btn.m-strict.on code { color: var(--danger); }
+.mode-btn.m-solo.on { border-color: var(--edge-ok); background: var(--tint-ok); box-shadow: 0 0 0 3px var(--tint-ok); }
+.mode-btn.m-solo.on code { color: var(--ok); }
+.gov-item .mode-btn { padding: 7px 8px; }
+.gov-item .mode-btn code { font-size: 9.5px; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; white-space: normal; }
+.flow-line { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 12px; }
+.flow-line .fn { padding: 3px 9px; border-radius: 8px; font-weight: 600; background: var(--bg-2); border: 1px solid var(--line-strong); white-space: nowrap; }
+.flow-line .fn.z { color: var(--ok); background: var(--tint-ok); border-color: var(--edge-ok); }
+.flow-line .fx { color: var(--text-3); }
+.routes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.route { min-width: 0; padding: 8px 10px; border-radius: 10px; font-size: 12px; line-height: 1.45; color: var(--text-2); background: var(--bg-2); border: 1px solid var(--line); opacity: .55; transition: opacity var(--dur-2), border-color var(--dur-2), background var(--dur-2); }
+.route code { display: block; font-size: 10.5px; color: var(--text-3); }
+.route b { display: block; margin: 2px 0; font-size: 12.5px; color: var(--text-1); }
+.route.on { opacity: 1; border-color: var(--edge-accent); background: var(--tint-accent); }
+.route.on code { color: var(--accent); }
+.perm-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.diff { font-family: var(--font-mono); font-size: 11.5px; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); }
+.diff div { padding: 5px 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.diff .h { background: var(--bg-3); color: var(--text-3); }
+.diff .m { background: var(--tint-danger); color: var(--danger); }
+.diff .p { background: var(--tint-ok); color: var(--ok); }
+.cur-list { display: grid; gap: 6px; }
+.cur { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 6px 8px 6px 10px; border-radius: 10px; background: var(--bg-2); border: 1px solid var(--line); transition: border-color var(--dur-2), background var(--dur-2); }
+.cur b { display: block; font-size: 12.5px; line-height: 1.3; }
+.cur small { display: block; font-family: var(--font-mono); font-size: 10.5px; color: var(--text-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cur.woke { border-color: var(--edge-accent); background: var(--tint-accent); }
+.envlp { padding: 8px 10px; border-radius: 10px; font-family: var(--font-mono); font-size: 11.5px; line-height: 1.6; color: var(--violet); background: var(--tint-violet); border: 1px solid var(--edge-violet); word-break: break-word; }
+.rd-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.rd-tab { min-width: 0; display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 10px; text-align: left; background: var(--bg-2); border: 1px solid var(--line); transition: border-color var(--dur-1), background var(--dur-1); }
+.rd-tab:hover { border-color: var(--line-strong); }
+.rd-tab .em { font-size: 18px; line-height: 1; flex: none; }
+.rd-tab > span:last-child { min-width: 0; display: flex; flex-direction: column; }
+.rd-tab b { font-size: 12.5px; font-weight: 620; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rd-tab small { font-family: var(--font-mono); font-size: 10px; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rd-tab.on { border-color: var(--edge-accent); background: var(--accent-soft); }
+.rd-src { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.rd-src .s { font-size: 11.5px; padding: 1px 8px; border-radius: 6px; color: var(--text-2); background: var(--bg-2); border: 1px solid var(--line); }
+.rd-flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.rd-st { min-width: 0; padding: 8px 10px; border-radius: 10px; background: var(--bg-2); border: 1px solid var(--line); }
+.rd-st b { display: block; font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.rd-st span { display: block; font-size: 11px; color: var(--text-3); line-height: 1.35; }
+.rd-st.fast { background: var(--tint-ok); border-color: var(--edge-ok); } .rd-st.fast b { color: var(--ok); }
+.rd-st.mem { background: var(--tint-accent); border-color: var(--edge-accent); } .rd-st.mem b { color: var(--accent); }
+.rd-st.slow { background: var(--tint-violet); border-color: var(--edge-violet); } .rd-st.slow b { color: var(--violet); }
+.rd-feed { display: grid; gap: 5px; }
+.fi { display: flex; align-items: center; gap: 8px; padding: 6px 8px 6px 10px; border-radius: 9px; font-size: 12px; background: var(--bg-2); border: 1px solid var(--line); }
+.fi .ft { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fi.drop { opacity: .6; }
+.fi.drop .ft { text-decoration: line-through; text-decoration-color: var(--text-3); }
+.fi.keep { border-color: var(--edge-ok); }
+.rd-ins { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.rd-ins div { min-width: 0; padding: 8px 10px; border-radius: 10px; font-size: 12px; line-height: 1.5; background: var(--tint-violet); border: 1px solid var(--edge-violet); }
+.rd-ins b { display: block; margin-bottom: 2px; font-size: 10.5px; letter-spacing: .06em; color: var(--violet); }
+.gov-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(330px, 100%), 1fr)); gap: 10px; }
+.gov-item { min-width: 0; display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 14px; background: var(--bg-1); border: 1px solid var(--line); }
+.gov-item .gh { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 13px; }
+.mem-provs { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.prov { min-width: 0; text-align: left; padding: 10px 12px; border-radius: 12px; background: var(--bg-1); border: 1px solid var(--line); transition: border-color var(--dur-2), background var(--dur-2), box-shadow var(--dur-2); }
+.prov:hover { border-color: var(--line-strong); }
+.prov b { display: block; font-family: var(--font-mono); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.prov small { display: block; margin-top: 2px; font-size: 11px; color: var(--text-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.prov.on { border-color: var(--edge-accent); background: var(--accent-soft); box-shadow: 0 0 0 3px var(--accent-soft); }
+.g2b { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; }
+.g2b > .blk { margin-top: 0; }
+.san { display: grid; gap: 6px; }
+.san-row { display: grid; grid-template-columns: minmax(0, 1fr) 16px minmax(0, 1fr); gap: 6px; align-items: center; font-family: var(--font-mono); font-size: 11.5px; }
+.san-row span { padding: 5px 8px; border-radius: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.san-row .bad { color: var(--danger); background: var(--tint-danger); border: 1px solid var(--edge-danger); }
+.san-row .good { color: var(--ok); background: var(--tint-ok); border: 1px solid var(--edge-ok); }
+.san-row .ar { padding: 0; text-align: center; color: var(--text-3); }
+.res-line { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 12.5px; color: var(--ok); }
+@media (max-width: 819px) {
+  .mem-provs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .g2b { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 559px) {
+  .rd-tabs, .rd-ins, .routes { grid-template-columns: minmax(0, 1fr); }
+  .mode-btn { padding: 7px 8px; }
+  .mode-btn code { font-size: 9.5px; }
+  .rd-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 /* === END BRIDGE CSS === */
 
 </style>
@@ -868,7 +966,7 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
     </div>
     <nav class="sb-scroll" id="sbList"></nav>
     <div class="tour">
-      <div class="ov">演示场景 Demo Tour</div>
+      <div class="ov">演示场景 Demo Tour · 示例数据</div>
       <div class="tour-btns" id="tourBtns">
         <button data-act="open" data-room="dm:chief-secretary" data-tour="a"><b>A</b>秘书私聊</button>
         <button data-act="open" data-room="group:design-prototype" data-tour="b"><b>B</b>项目玻璃房</button>
@@ -956,6 +1054,7 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
     inheritGlobalAgentsMd: true, allowTaskModelOverride: false,
     model: "google/gemini-4-argon", fallbacks: ["openai/gpt-6.1-sol", "deepseek/deepseek-v4-flash", "xai/grok-4.7"],
     thinking: "xhigh", scope: "company_all", kvHit: 94.2, prefixTokens: "24.8k", deltaTokens: "+410",
+    perms: ["direct_scoped_write", "spawn_async_subagent", "dispatch_all", "stage_gate_hold", "contract_pass_through", "final_acceptance"],
     mandate: { id: "MD-GLOBAL", title: "全公司阶段闸门与派活总控", path: ".agentsxco/state.sqlite", status: "ACTIVE" }
   });
   seat("ux-lead", {
@@ -1010,14 +1109,78 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
   seat("godot-lead", { name: "Godot主程", short: "Godot主程", en: "Godot Lead Architect", emoji: "🎮", hue: 135, dept: "产品与游戏", model: "openai/gpt-6.1-sol", scope: "group_internal", persona: "负责 Godot 4 2D 场景树、状态机、物理碰撞与关卡数据管线。" });
   seat("pixel-artist", { name: "像素美术", short: "像素美术", en: "2D Pixel & Tile Artist", emoji: "👾", hue: 315, dept: "产品与游戏", model: "anthropic/claude-opus-5-5", scope: "peer_assist", persona: "绘制 2D 角色帧动画、Tilemap 地块与 UI 精灵图集。" });
   seat("game-qa", { name: "玩法质检", short: "玩法质检", en: "Gameplay Critic", emoji: "🕹️", hue: 22, dept: "产品与游戏", model: "xai/grok-4.7", scope: "group_review", persona: "测试手感帧窗口、关卡死路、数值崩坏与新手引导卡点。" });
+  seat("trend-catcher", {
+    name: "热点捕手", short: "热点捕手", en: "Read-Only Viral Radar Sentry", emoji: "📱", hue: 330, dept: "情报哨所",
+    status: "idle", statusText: "只读哨兵 · resident_cron 每 2h 扫描热榜",
+    persona: "常驻只读哨兵：监听小红书、X/Twitter、YouTube、抖音/B站热榜与竞品爆款。Fast Path 用 0 Token 规则滤掉带货软文和 24 小时前的旧闻，Slow Path 提炼冲突视角、受众痛点与黄金 3 秒 Hook，经记忆库比对往期选题防撞车后，只私聊总秘书呈报 1/2/3 选题大纲。",
+    model: "deepseek/deepseek-v4-flash", fallbacks: ["deepseek/deepseek-flash"],
+    thinking: "high", scope: "report_to_secretary_only", kvHit: 95.6, prefixTokens: "12.8k", deltaTokens: "+120",
+    canWrite: false, lockScope: true, mandate: null
+  });
+  seat("content-editor", { name: "主编", short: "主编", en: "Managing Editor · Group Lead", emoji: "📝", hue: 28, dept: "内容工作室", status: "working", statusText: "等待选题派单 · solo_fast 档", model: "anthropic/claude-opus-5-5", scope: "group_internal", persona: "「自媒体热点捕手」群组长。把总秘书派下来的选题大纲改写成符合账号人设的成稿，统筹脚本与事实核查。" });
+  seat("hook-writer", { name: "脚本编导", short: "脚本编导", en: "Hook & Script Writer", emoji: "🎬", hue: 8, dept: "内容工作室", model: "anthropic/claude-opus-5-5", scope: "peer_assist", persona: "把选题大纲拆成 60 秒短视频分镜，打磨黄金 3 秒开场钩子与评论区引导。" });
+  seat("fact-checker", { name: "事实核查", short: "事实核查", en: "Fact Checker", emoji: "🧾", hue: 168, dept: "内容工作室", model: "xai/grok-4.7", scope: "group_review", persona: "逐条核对数据出处、截图真伪与版权风险，发现问题直接 @ 对应作者返工。" });
 
   var GROUPS = [
-    { id: "group:design-prototype", name: "设计原型", topic: "第一阶段：仿 PulseChat 极简高帧率 2D 聊天产品界面设计（Step 2 已由总秘书扣留）", members: ["chief-secretary", "ux-lead", "visual-designer", "prototype-engineer", "design-critic"], lead: "ux-lead", critic: "design-critic", unread: true, badge: "v1.1 待收口" },
-    { id: "group:issue-triage", name: "Issue分诊台", topic: "线上缺陷最小复现、根因定位与热修派单", members: ["chief-secretary", "triage-lead", "repro-bot", "patch-smith", "qa-gate", "feedback-collector"], lead: "triage-lead", critic: "qa-gate", unread: false, badge: "2 进行中" },
-    { id: "group:deploy-review", name: "部署审查", topic: "预演网关验证、战前快照、首屏体积门禁与原子发布", members: ["chief-secretary", "release-warden", "sec-auditor", "perf-bench", "qa-gate", "prototype-engineer"], lead: "release-warden", critic: "sec-auditor", unread: false, badge: "门禁 PASS" },
-    { id: "group:product-research", name: "产品调研", topic: "跨宿主多智能体协作痛点与用户反馈聚类分析", members: ["chief-secretary", "research-lead", "market-scout", "ux-lead", "design-critic", "feedback-collector"], lead: "research-lead", critic: "design-critic", unread: false, badge: "周报已归档" },
-    { id: "group:godot-project", name: "Godot项目", topic: "第二阶段候命群 · 等待第一阶段 2D 产品界面验收后解锁派单", members: ["chief-secretary", "godot-lead", "pixel-artist", "prototype-engineer", "game-qa"], lead: "godot-lead", critic: "game-qa", unread: false, badge: "候命 · 闸门锁定" }
+    { id: "group:design-prototype", name: "设计原型", topic: "第一阶段：仿 PulseChat 极简高帧率 2D 聊天产品界面设计（Step 2 已由总秘书扣留）", members: ["chief-secretary", "ux-lead", "visual-designer", "prototype-engineer", "design-critic"], lead: "ux-lead", critic: "design-critic", unread: true, badge: "v1.1 待收口", mode: "adaptive", route: "room_pipeline" },
+    { id: "group:viral-radar", name: "自媒体热点捕手", topic: "快慢双路哨兵 · 多平台热榜 → 0 Token 粗筛 → 选题提炼 → 1/2/3 选题大纲", members: ["chief-secretary", "content-editor", "trend-catcher", "hook-writer", "fact-checker"], lead: "content-editor", critic: "fact-checker", unread: false, badge: "哨兵常驻", mode: "solo_fast" },
+    { id: "group:issue-triage", name: "Issue分诊台", topic: "线上缺陷最小复现、根因定位与热修派单", members: ["chief-secretary", "triage-lead", "repro-bot", "patch-smith", "qa-gate", "feedback-collector"], lead: "triage-lead", critic: "qa-gate", unread: false, badge: "2 进行中", mode: "adaptive", route: "async_subagent" },
+    { id: "group:deploy-review", name: "部署审查", topic: "预演网关验证、战前快照、首屏体积门禁与原子发布", members: ["chief-secretary", "release-warden", "sec-auditor", "perf-bench", "qa-gate", "prototype-engineer"], lead: "release-warden", critic: "sec-auditor", unread: false, badge: "门禁 PASS", mode: "strict_pipeline" },
+    { id: "group:product-research", name: "产品调研", topic: "跨宿主多智能体协作痛点与用户反馈聚类分析", members: ["chief-secretary", "research-lead", "market-scout", "ux-lead", "design-critic", "feedback-collector"], lead: "research-lead", critic: "design-critic", unread: false, badge: "周报已归档", mode: "adaptive", route: "direct_exec" },
+    { id: "group:godot-project", name: "Godot项目", topic: "第二阶段候命群 · 等待第一阶段 2D 产品界面验收后解锁派单", members: ["chief-secretary", "godot-lead", "pixel-artist", "prototype-engineer", "game-qa"], lead: "godot-lead", critic: "game-qa", unread: false, badge: "候命 · 闸门锁定", mode: "adaptive", route: "room_pipeline" }
   ];
+
+  var GOV = {
+    strict_pipeline: { n: "强制全流程", cls: "m-strict", v: "danger", route: "room_pipeline", flow: ["0 Token 跳过评估", "签发施工证", "专职质疑", "总秘书终审", "交付"],
+      d: "公司合规档：零 Token 跳过评估，哪怕只改一行文案，也强制走完「派单 → 专职质疑 → 总秘书终审」并完整留痕。" },
+    adaptive: { n: "智能动态评估", cls: "", v: "accent", route: null, flow: ["被唤起者顺手评估", "① / ② / ③ 三态路由"],
+      d: "默认档：由被唤起的总秘书或组长在同一次思考里顺手判定走哪条路，不额外拆出评估模块浪费一次推理。" },
+    solo_fast: { n: "个人极速", cls: "m-solo", v: "ok", route: "direct_exec", flow: ["0 Token 跳过评估", "被唤起角色直改", "基础校验", "交付"],
+      d: "个人脚本档：零 Token 跳过评估，被唤起的角色直接读写、跑完基础校验即交付，不强制施工证与专职质疑。" }
+  };
+  var ROUTES = [
+    { id: "direct_exec", n: "① 亲自秒做", d: "低风险小改，唤起者当场改完，不拉群、不挂巡检" },
+    { id: "async_subagent", n: "② 后台单兵", d: "耗时但边界单一，派生隔离子代理并返回句柄" },
+    { id: "room_pipeline", n: "③ 拉群走工作流", d: "跨专业耦合或高风险，签发施工证进项目群" }
+  ];
+  var RADAR = [
+    { id: "media-trend-catcher", em: "📱", name: "自媒体热点捕手", seat: "trend-catcher", cron: "resident_cron · 每 2h", room: "group:viral-radar",
+      src: ["小红书热榜", "X / Twitter Trends", "YouTube Trending", "抖音 / B站热榜", "竞品爆款"],
+      nums: [["1,860", "原始热榜条目"], ["42", "Fast Path · 0 Token 后"], ["37", "记忆去重后"], ["3", "Slow Path 呈报选题"]],
+      feed: [["drop", "【限时 3 折】某精华液直播间福利，评论区抽 10 人", "带货软文"], ["drop", "2 天前 · 某旗舰手机发布会全程回顾", ">24h 旧闻"], ["drop", "「一人公司用 AI 代理上班」转载 #3", "哈希重复"], ["keep", "实测：让 5 个 AI 代理组队上班，一周后发生了什么", "保留"], ["keep", "打工人用 AI 写周报被老板发现，评论区吵翻了", "保留"]],
+      mem: "5 条与往期已发选题撞车（dedup_check），直接跳过、不进模型",
+      ins: [["冲突视角", "“AI 抢饭碗”vs“AI 是外挂”：站在打工人一侧反转"], ["受众痛点", "怕被替代，又不知道从哪一步开始用"], ["黄金 3 秒 Hook", "“我把工作外包给了 5 个 AI，第 3 天就出事了”"]],
+      outLabel: "1/2/3 可点击选题大纲",
+      out: [["5 个 AI 组队上班一周实录", "Hook：第 3 天出事 · 冲突：效率 vs 失控 · 人设契合度 92%"], ["AI 写周报被抓包，该不该道歉？", "Hook：老板的回复截图 · 冲突：职场伦理 · 人设契合度 81%"], ["普通人上手 AI 代理的 3 个最小动作", "Hook：今晚就能做 · 冲突：门槛焦虑 · 人设契合度 74%"]],
+      team: "@主编 按大纲开写，@脚本编导 出 60 秒分镜，@事实核查 核对出处" },
+    { id: "dev-issue-triage", em: "🛠️", name: "研发反馈哨", seat: "feedback-collector", cron: "resident_cron · 每 30min", room: "group:issue-triage",
+      src: ["GitHub Issues", "PR 讨论", "用户群吐槽", "应用商店评论"],
+      nums: [["312", "原始反馈"], ["21", "Fast Path · 0 Token 后"], ["6", "记忆去重后"], ["1", "Slow Path 呈报问题"]],
+      feed: [["drop", "“能不能出个深色模式？”（已立项 #188）", "已立项"], ["drop", "TypeError: undefined is not a function ×10", "堆栈指纹合并"], ["drop", "“楼上 +1”", "无信息量"], ["keep", "iOS 17 长按消息无反应，无法引用回复", "保留"], ["keep", "弱网下发送失败没有重试入口", "保留"]],
+      mem: "10 条重复报错合并为 1 条「受影响人数 +9」；这里只做去重提示，正式立项时仍在 SQLite 事务内检查任务指纹",
+      ins: [["根因假设", "iOS 17 触摸事件被滚动容器吞掉"], ["影响面", "19 位重度用户 · 38% 移动端会话"], ["复现路径", "390px · 长按 600ms · 无菜单弹出"]],
+      outLabel: "1/2/3 可点击修复方案",
+      out: [["并入当前迭代，补长按菜单", "交互设计 + 原型工程 · 预计 0.5 天"], ["单独立项，排在 Step 2 之后", "不打断主线 · 下周处理"], ["暂不处理，归档至产品调研群", "继续观察受影响人数"]],
+      team: "@分诊组长 拆包，@复现工程 先写最小复现，@质量守门员 独立回归" },
+    { id: "competitor-radar", em: "📈", name: "竞品盯盘哨", seat: "feedback-collector", cron: "resident_cron · 每 6h", room: "group:product-research",
+      src: ["竞品 Changelog", "定价页 DOM Diff", "社媒舆情"],
+      nums: [["96", "页面快照 Diff"], ["4", "Fast Path · 0 Token 后"], ["2", "记忆去重后"], ["1", "Slow Path 呈报异动"]],
+      feed: [["drop", "定价页页脚字号 14px → 13px", "排版微调"], ["drop", "Changelog：修正 3 处错别字", "无实质变化"], ["drop", "博客首页换了头图", "排版微调"], ["keep", "Pro 档月费 $20 → $15，新增团队席位", "价格异动"], ["keep", "上线「多代理协作」Beta", "核心功能"]],
+      mem: "与竞品历史台账比对：「协作 Beta」上月已预告，降级为持续跟踪",
+      ins: [["异动事实", "Pro 档降价 25%，捆绑团队席位"], ["对我方影响", "个人用户转化可能被分流"], ["应对窗口", "约 2 周，赶在对方宣推前"]],
+      outLabel: "1/2/3 可点击应对策略",
+      out: [["主打跨模型 + 零密钥迁移的差异化", "不降价 · 更新落地页对比表"], ["推出个人免费档", "影响收入 · 需财务评估"], ["继续观察两周", "由竞品哨每 6 小时跟踪"]],
+      team: "@调研组长 牵头，@市场侦察 补齐口碑与定价数据" }
+  ];
+  var MEMS = [
+    { id: "memory-lancedb-pro", label: "memory-lancedb-pro", eco: "OpenClaw 生态首选", mode: "hybrid_vector_fts", repo: "CortexReach/memory-lancedb-pro" },
+    { id: "reme", label: "ReMe", eco: "DSH / AgentScope", mode: "structured_experience_memory", repo: "agentscope-ai/ReMe" },
+    { id: "memsearch", label: "memsearch", eco: "DSH / Zilliz", mode: "markdown_first_semantic", repo: "zilliztech/memsearch" },
+    { id: "sqlite-fts5", label: "sqlite-fts5", eco: "零依赖内置默认", mode: "local_fts5_fallback", repo: "" },
+    { id: "custom-next", label: "custom-next", eco: "自定义扩展插槽", mode: "pluggable_driver", repo: "" }
+  ];
+  var MEM_PRIMS = ["recall(query, scope)", "memorize(entry, scope)", "dedup_check(fingerprint)"];
+  var PIG_SEATS = ["ux-lead", "visual-designer", "prototype-engineer", "design-critic"];
 
   var FILES = {
     "IA_STATE_MAP.md": {
@@ -1057,6 +1220,11 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
     probeSeat: null,
     companyName: "Agents x Company · 默认工作室",
     importedDept: [],
+    radar: 0,
+    topicPick: {},
+    memProvider: "memory-lancedb-pro",
+    rulesOpen: window.matchMedia("(min-width: 820px)").matches,
+    pig: { head: 52, cur: { "ux-lead": 50, "visual-designer": 49, "prototype-engineer": 51, "design-critic": 52 }, woke: null, phase: 0, env: null },
     msgs: {}
   };
 
@@ -1074,6 +1242,17 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
       reportCard: true
     },
     {
+      id: "m3r", from: "chief-secretary", time: "14:20",
+      text: "还有一条内容情报：@热点捕手 刚经 **Fast Path（0 Token 粗筛）→ 记忆去重 → Slow Path 提炼** 呈报了 3 个选题，我按账号人设做完了二审。也可以切到另外两套哨兵预设看看：",
+      radarCard: "brief"
+    },
+    { id: "m3x", from: "me", time: "14:22", tick: "read", text: "顺手把官网页脚的 © 2025 改成 2026 吧。" },
+    {
+      id: "m3y", from: "chief-secretary", time: "14:22",
+      text: "这种一行的小事我直接改完了——没拉群、没签施工证，也没挂巡检：",
+      execCard: true
+    },
+    {
       id: "m4", from: "chief-secretary", time: "14:28",
       text: "「设计原型」群的 4 位成员已经完成一轮 **初稿交付 → @设计质疑 挑刺打回（4 项缺陷）→ v1.1 全量修复复核**，我刚跑完终审清单，你可以直接一键验收：",
       acceptCard: true
@@ -1082,32 +1261,33 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
 
   S.msgs["group:design-prototype"] = [
     {
-      id: "g1", from: "chief-secretary", time: "14:03",
+      id: "g1", seq: 44, from: "chief-secretary", time: "14:03",
       text: "立项派单：请大家聚焦完成《第一份：2D 产品界面设计》。@交互设计 负责信息架构与弱网状态机，@视觉设计 负责深浅双主题 Token 与对比度，@原型工程 落地可交互 2D 原型，完成后统一交由 @设计质疑 独立挑刺审查。",
       taskCard: {
         id: "TASK-0412 · Step 1 / 1（当前群可见范围）",
         title: "《第一份：2D 产品界面设计》— 仿 PulseChat 极简高帧率桌面 + 移动双端界面",
         scope: "specs/IA_STATE_MAP.md · specs/VISUAL_TOKENS.md · ui/chat-2d-proto.html",
-        note: "🔒 阶段闸门保护生效：老板交代的第二阶段任务已由总秘书扣留（组员可见性 0%），本群仅注入第一阶段上下文。"
+        note: "🔒 阶段闸门保护生效：老板交代的第二阶段实现任务已由总秘书扣留（组员可见性 0%），本群只拿到下方这份只读接口契约。",
+        contract: true
       }
     },
     {
-      id: "g2", from: "ux-lead", time: "14:07",
+      id: "g2", seq: 45, from: "ux-lead", time: "14:07",
       text: "收到，@视觉设计 @原型工程 我先把三栏黄金比例、会话列表虚拟滚动契约和消息状态机整理成初稿了，请对齐：",
       file: "IA_STATE_MAP.md"
     },
     {
-      id: "g3", from: "visual-designer", time: "14:10",
+      id: "g3", seq: 46, from: "visual-designer", time: "14:10",
       text: "深浅两套色彩 Token 和气泡圆角规范已出（v1.0），配好了电光蓝强调色和毛玻璃顶栏，@原型工程 可以直接引用变量：",
       file: "VISUAL_TOKENS.md"
     },
     {
-      id: "g4", from: "prototype-engineer", time: "14:14",
+      id: "g4", seq: 47, from: "prototype-engineer", time: "14:14",
       text: "2D 桌面与手机双视口交互原型 v1.0 已挂载！支持会话秒切和消息发送，请 @设计质疑 进场挑刺：",
       file: "chat-2d-proto.html"
     },
     {
-      id: "g5", from: "design-critic", time: "14:18",
+      id: "g5", seq: 48, from: "design-critic", time: "14:18",
       text: "我刚用 390×844 窄屏探针 + WCAG 对比度脚本 + 弱网模拟器跑了一遍 v1.0，结论：**CONDITIONAL（有条件打回，共 4 项必须修复）**——",
       critique: [
         "① **气泡时间戳对比度不达标**：深蓝色我方气泡（#1D4ED8）里的浅灰时间戳 #94A3B8 实测对比度仅 **3.63:1**，低于 WCAG AA 4.5:1 红线，强光下几乎看不清；@视觉设计 请上调。",
@@ -1117,19 +1297,19 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
       ]
     },
     {
-      id: "g6", from: "visual-designer", time: "14:21",
+      id: "g6", seq: 49, from: "visual-designer", time: "14:21",
       text: "认领 ①！已将我方气泡内的时间戳与双勾 Token 从 #94A3B8 提亮至 #DBEAFE，重新实测对比度达到 **4.99:1**（> 4.5:1 AA 标准），VISUAL_TOKENS.md 已升至 v1.1。"
     },
     {
-      id: "g7", from: "ux-lead", time: "14:23",
+      id: "g7", seq: 50, from: "ux-lead", time: "14:23",
       text: "认领 ② 和 ③！已在 IA_STATE_MAP.md v1.1 补入 §6 28px 琥珀色断网重连条 + 离线队列手动重试状态，并在 §10 锁定状态勾内联基线不遮挡末字。"
     },
     {
-      id: "g8", from: "prototype-engineer", time: "14:25",
+      id: "g8", seq: 51, from: "prototype-engineer", time: "14:25",
       text: "ui/chat-2d-proto.html 已从 **v1.0 → v1.1** 全量同步：补齐断网重连 Banner、内联双勾基线，并修复 390px 顶栏响应式收纳（实测横向溢出 0px）。请 @设计质疑 复检！"
     },
     {
-      id: "g9", from: "design-critic", time: "14:27",
+      id: "g9", seq: 52, from: "design-critic", time: "14:27",
       text: "v1.1 复检全部通过（对比度 4.99:1 PASS · 断网队列 PASS · 双勾基线零遮挡 PASS · 390px 零溢出 PASS），签署 STEP_1_VERIFIED_PASS。@助手 需要收口并呈交老板终审！"
     }
   ];
@@ -1146,6 +1326,13 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
       { id: "gm-" + g.id, from: g.lead, time: "13:45", text: "本群（" + g.name + "）持久命名会话已就绪，组长 @" + SEATS[g.lead].short + " 与独立审查席 @" + SEATS[g.critic].short + " 前缀热缓存命中率 >91%。" }
     ];
   });
+  S.msgs["group:viral-radar"] = [
+    {
+      id: "vr1", from: "content-editor", time: "13:58",
+      text: "本群是「📱 自媒体热点捕手」内容工作室，制度档位 `solo_fast`：选题派下来我直接开写。@热点捕手 常驻只读监听各平台热榜，**不在群里发言**，提炼结果只私聊 @助手，二审后再派进本群。下面是哨兵管线实况，可切换 3 套预设预览：",
+      radarCard: "full"
+    }
+  ];
   function $(sel, el) { return (el || document).querySelector(sel); }
   function esc(str) {
     return String(str == null ? "" : str)
@@ -1180,6 +1367,109 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
     var list = S.msgs[room] || [];
     return list[list.length - 1];
   }
+  function groupOf(id) { return GROUPS.find(function (x) { return x.id === id; }); }
+
+  function contractHtml() {
+    return '<div class="contract"><div class="t">🔒 全局只读接口契约 · Read-Only Interface Contract' + chip("随 Step 1 透传", "accent") + "</div>预留 <code>#game-overlay-root</code> 全屏挂载点与 <code>window.AgentsxCoBridge.mountScene(config)</code> 事件桥签名；只读不可改，<b>严禁提前编写 Step 2 代码</b>。</div>";
+  }
+
+  function routesHtml(active) {
+    return '<div class="routes">' + ROUTES.map(function (r) {
+      return '<div class="route' + (r.id === active ? " on" : "") + '"><code>' + r.id + "</code><b>" + esc(r.n) + "</b>" + esc(r.d) + "</div>";
+    }).join("") + "</div>";
+  }
+
+  function modeSegHtml(g) {
+    return '<div class="mode-seg" role="group" aria-label="制度档位">' + Object.keys(GOV).map(function (k) {
+      var x = GOV[k];
+      return '<button class="mode-btn ' + x.cls + (k === g.mode ? " on" : "") + '" data-act="gov" data-room="' + esc(g.id) + '" data-mode="' + k + '" aria-pressed="' + (k === g.mode) + '"><code>' + k + "</code><b>" + esc(x.n) + "</b></button>";
+    }).join("") + "</div>";
+  }
+
+  function radarCard(mode) {
+    var p = RADAR[S.radar], full = mode === "full", k = S.topicPick[p.id] || 0, sn = SEATS[p.seat];
+    var h = '<div class="scard"><div class="sc-head"><div class="sc-title"><span>📡 快慢双路哨兵 · ' + esc(p.name) + "</span>" + chip("report_to_secretary_only", "violet", "mono") + "</div>";
+    h += '<div class="sc-sub">只读监听 → Fast Path 0 Token 粗筛 → 记忆去重 → Slow Path 提炼 → 只私聊总秘书呈报 1/2/3 · 当前哨兵：' + esc(sn.name) + "</div></div>";
+    h += '<div class="sc-body"><div class="rd-tabs" role="group" aria-label="哨兵预设">' + RADAR.map(function (x, i) {
+      return '<button class="rd-tab' + (i === S.radar ? " on" : "") + '" data-act="radar" data-i="' + i + '" aria-pressed="' + (i === S.radar) + '"><span class="em">' + x.em + "</span><span><b>" + esc(x.name) + "</b><small>" + esc(x.id) + "</small></span></button>";
+    }).join("") + "</div>";
+    h += '<div class="rd-src">' + chip(esc(p.cron), "neutral", "mono") + p.src.map(function (s) { return '<span class="s">' + esc(s) + "</span>"; }).join("") + "</div>";
+    var cls = ["", "fast", "mem", "slow"];
+    h += '<div class="rd-flow">' + p.nums.map(function (n, i) { return '<div class="rd-st ' + cls[i] + '"><b>' + esc(n[0]) + "</b><span>" + esc(n[1]) + "</span></div>"; }).join("") + "</div>";
+    if (full) {
+      h += '<div class="rp-label">⚡ Fast Path · 正则 / 时间戳 / 哈希指纹，0 Token 筛掉广告、旧闻与重复</div><div class="rd-feed">' + p.feed.map(function (f) {
+        return '<div class="fi ' + f[0] + '"><span class="ft">' + esc(f[1]) + "</span>" + chip(esc(f[2]), f[0] === "keep" ? "ok" : "neutral") + "</div>";
+      }).join("") + "</div>";
+    }
+    h += '<div class="rd-note">🧠 ' + esc(p.mem) + "</div>";
+    h += '<div class="rd-ins">' + p.ins.map(function (x) { return "<div><b>" + esc(x[0]) + "</b>" + esc(x[1]) + "</div>"; }).join("") + "</div>";
+    h += '<div class="rp-label" style="margin:0">' + esc(p.outLabel) + " · 点选即派单</div>";
+    h += '<div class="opts' + (k ? " decided" : "") + '">' + p.out.map(function (o, i) {
+      return '<div class="opt' + (k === i + 1 ? " sel" : "") + '" data-act="topic" data-k="' + (i + 1) + '"><span class="k">' + (i + 1) + '</span><span class="o-txt"><b>' + esc(o[0]) + "</b><small>" + esc(o[1]) + "</small></span>" + (i === 0 ? chip("推荐", "ok") : "") + "</div>";
+    }).join("") + "</div>";
+    if (k) h += '<div class="res-line">✓ 已派单 →「' + esc(groupOf(p.room).name) + "」群</div>";
+    if (!full) h += '<div><button class="btn sm" data-act="open" data-room="group:viral-radar">进入「自媒体热点捕手」群看完整管线 →</button></div>';
+    return h + "</div></div>";
+  }
+
+  function execCardHtml() {
+    var h = '<div class="scard"><div class="sc-head"><div class="sc-title"><span>⚡ 总秘书直接执行 · direct_exec</span>' + chip("adaptive · 唤起者三态路由", "accent") + '</div><div class="sc-sub">委派是优化手段，不是教条：顺手能改完的小事当场改完交差。</div></div><div class="sc-body">';
+    h += routesHtml("direct_exec");
+    h += '<div class="diff"><div class="h">site/footer.html · direct_scoped_write · 未拉群 · 不挂 Watchdog</div><div class="m">- &lt;span&gt;© 2025 Agents x Company&lt;/span&gt;</div><div class="p">+ &lt;span&gt;© 2026 Agents x Company&lt;/span&gt;</div></div>';
+    h += '<div class="perm-row">' + chip("direct_scoped_write", "ok", "mono") + chip("spawn_async_subagent", "accent", "mono") + chip("contract_pass_through", "violet", "mono") + chip("stage_gate_hold", "gold", "mono") + "</div>";
+    h += '<div class="rd-note">耗时长的活（比如跑全量回归）我会用 spawn_async_subagent 挂到后台，返回句柄 bg-7f3a，前台不阻塞；只有跨模块重构才拉群走 room_pipeline。</div>';
+    return h + "</div></div>";
+  }
+
+  function pigHtml() {
+    var P = S.pig;
+    var h = '<div class="rp-label" style="margin:2px 0 0">🔔 明面 @ 玻璃房 + 底层按需捷带唤醒 · Lazy Cursor Piggybacking</div>';
+    h += '<div class="rd-note">群内对齐、指路、打回一律显式 @。没被 @ 的成员只累积待消费事件，lastReadEventSeq 原地不动（0 Token）；被点名后才把积压增量打包成 Turn Delta Envelope 捷带注入，消费成功后才提交游标。消息头里的 #序号 就是事件序号。</div>';
+    h += '<div class="cur-list">' + PIG_SEATS.map(function (id) {
+      var s = SEATS[id], c = P.cur[id], pend = P.head - c, woke = P.woke === id, st;
+      if (woke && P.phase === 1) st = chip("消费中 · 游标未提交", "warn");
+      else if (woke) st = chip("游标已提交", "ok");
+      else if (pend > 0) st = '<button class="btn sm" data-act="pig-at" data-seat="' + id + '"' + (P.phase === 1 ? " disabled" : "") + ">@" + esc(s.short) + " 点名</button>";
+      else st = chip("已同步", "neutral");
+      return '<div class="cur' + (woke ? " woke" : "") + '">' + avHtml(s, "sm") + "<span><b>" + esc(s.name) + "</b><small>lastReadEventSeq #" + c + (pend > 0 ? " · 待消费 +" + pend + " · 0 Token 休眠" : "") + "</small></span>" + st + "</div>";
+    }).join("") + "</div>";
+    if (P.env) {
+      h += '<div class="envlp">Turn Delta Envelope { seat: "' + esc(P.env.seat) + '", fromSeq: ' + P.env.from + ", toSeq: " + P.env.to + ", events: " + (P.env.to - P.env.from + 1) + ', tag: "Context-only" }<br>' +
+        (P.phase === 1 ? "→ 注入中；消费成功前 lastReadEventSeq 保持 #" + (P.env.from - 1) : "✓ 消费成功 → 提交 lastReadEventSeq #" + (P.env.from - 1) + " → #" + P.env.to) + "</div>";
+    }
+    return h;
+  }
+
+  function roomRulesCard(g) {
+    var m = GOV[g.mode];
+    var h = '<div class="scard room-rules"><div class="sc-head"><div class="sc-title"><span>🏛️ 本群制度门禁 · Project Governance Mode</span><span>' + chip(esc(g.mode), m.v, "mono") + '<button class="btn sm ghost" data-act="rules-toggle">' + (S.rulesOpen ? "收起" : "展开") + "</button></span></div>";
+    if (!S.rulesOpen) return h + "</div></div>";
+    h += '<div class="sc-sub">' + esc(m.d) + '</div></div><div class="sc-body">' + modeSegHtml(g);
+    h += '<div class="flow-line">' + m.flow.map(function (f, i) { return (i ? '<span class="fx">→</span>' : "") + '<span class="fn' + (f.indexOf("0 Token") === 0 ? " z" : "") + '">' + esc(f) + "</span>"; }).join("") + "</div>";
+    h += routesHtml(m.route || g.route || "room_pipeline");
+    if (g.id === "group:design-prototype") h += pigHtml();
+    return h + "</div></div>";
+  }
+
+  function pigWake(id) {
+    var P = S.pig;
+    if (P.phase === 1 || P.cur[id] == null || P.cur[id] >= P.head) return;
+    P.woke = id; P.phase = 1; P.env = { seat: id, from: P.cur[id] + 1, to: P.head };
+    renderStream();
+    setTimeout(function () {
+      if (P !== S.pig || P.woke !== id || P.phase !== 1) return;
+      P.cur[id] = P.env.to; P.phase = 2;
+      if (S.room === "group:design-prototype") renderStream();
+    }, 900);
+  }
+  function pigEvent(from, text) {
+    var P = S.pig;
+    P.head++;
+    if (P.cur[from] != null) P.cur[from] = P.head;
+    PIG_SEATS.forEach(function (id) { if (text.indexOf("@" + SEATS[id].short) !== -1) P.cur[id] = P.head; });
+    P.woke = null; P.env = null; P.phase = 0;
+    return P.head;
+  }
 
   function renderSidebar() {
     var q = S.search.trim().toLowerCase();
@@ -1205,7 +1495,7 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
     });
     h += "</div>";
 
-    var depts = ["原型设计师", "情报哨所", "工程与质量", "产品与游戏"];
+    var depts = ["原型设计师", "情报哨所", "内容工作室", "工程与质量", "产品与游戏"];
     if (S.importedDept.length) depts.push("导入员工");
     Object.keys(SEATS).forEach(function (k) {
       var d = SEATS[k].dept;
@@ -1246,12 +1536,12 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
     var h = '<button class="icon-btn menu-btn" data-act="sb-toggle" aria-label="展开导航">' + IC.menu + "</button>";
     if (S.room === "org") {
       h += '<div class="av sm" style="--hue:215">🏢</div>';
-      h += '<div class="h-title"><div class="t-row"><h2>组织架构与 company.json 中心</h2>' + chip("Schema v1", "accent", "mono") + chip("5 Harnesses", "ok") + "</div>";
+      h += '<div class="h-title"><div class="t-row"><h2>组织架构与 company.json 中心</h2>' + chip("Schema v1.1", "accent", "mono") + chip("5 Harnesses", "ok") + chip("sanitized: true", "ok", "mono h-hide-xs") + "</div>";
       h += '<div class="t-sub"><span>' + esc(S.companyName) + " · 零密钥可移植组织包</span></div></div>";
     } else if (S.room.indexOf("group:") === 0) {
       var g = GROUPS.find(function (x) { return x.id === S.room; }) || GROUPS[0];
       h += '<div class="av sm" style="--hue:222">🏛️</div>';
-      h += '<div class="h-title"><div class="t-row"><h2>' + esc(g.name) + "</h2>" + chip(g.members.length + " 席位在群", "accent") + chip("Stage 1 Active", "gold") + chip("KV 92.4%", "ok", "mono h-hide-xs") + "</div>";
+      h += '<div class="h-title"><div class="t-row"><h2>' + esc(g.name) + "</h2>" + chip(g.members.length + " 席位在群", "accent") + chip(esc(g.mode), GOV[g.mode].v, "mono h-hide-xs") + (g.id === "group:design-prototype" ? chip("Stage 1 Active", "gold") : "") + chip("KV 92.4%", "ok", "mono h-hide-xs") + "</div>";
       h += '<div class="t-sub"><span>' + esc(g.topic) + "</span></div></div>";
     } else {
       var sid = S.room.replace("dm:", "");
@@ -1287,11 +1577,13 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
       : (SEATS[S.room.replace("dm:", "")] || SEATS["chief-secretary"]).short;
     $("#input").placeholder = "给 " + targetName + " 发消息…（支持 @角色名 定向唤醒）";
     $("#cmpHint").textContent = S.room.indexOf("group:") === 0
-      ? "群内 Context-only 信封：普通群消息仅作尾部上下文追加，持施工证（Mandate）才解锁写文件"
+      ? "明面 @ 点名才唤醒：未被 @ 的成员只累积待消费事件、不推进 lastReadEventSeq；持施工证才解锁写文件"
       : "1v1 持久命名会话：前缀 [人设 + 岗位规则 + 工具定义] 字节级锁定，KV Cache 命中率 >91%";
 
     var list = S.msgs[S.room] || [];
     var h = '<div class="day-div"><span>今天 · 持久命名会话流（尾部增量信封）</span></div>';
+    var curGroup = S.room.indexOf("group:") === 0 ? groupOf(S.room) : null;
+    if (curGroup) h += roomRulesCard(curGroup);
     list.forEach(function (m) {
       var isMe = m.from === "me";
       var s = isMe ? { name: "老板 · Owner", short: "我", emoji: "🧑‍💼", hue: 215, model: "Human Owner", scope: "owner" } : (SEATS[m.from] || SEATS["chief-secretary"]);
@@ -1299,8 +1591,12 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
       h += isMe ? '<div class="av sm" style="--hue:215">🧑‍💼</div>' : '<div data-act="insp-seat" data-seat="' + esc(s.id) + '" style="cursor:pointer">' + avHtml(s, "sm") + "</div>";
       h += '<div class="col"><div class="head"><span class="who" data-act="insp-seat" data-seat="' + esc(s.id || "chief-secretary") + '">' + esc(s.name) + "</span>";
       if (!isMe) h += '<span class="role-tag">' + esc(s.model) + " · " + esc(s.scope) + "</span>";
-      h += '<span class="tm">' + esc(m.time) + "</span></div>";
+      h += '<span class="tm">' + esc(m.time) + "</span>";
+      if (m.seq) h += '<span class="seq-tag">#' + m.seq + "</span>";
+      h += "</div>";
       h += '<div class="bub"><div class="txt">' + fmtText(m.text) + "</div>";
+      if (m.radarCard) h += radarCard(m.radarCard);
+      if (m.execCard) h += execCardHtml();
 
       if (m.choiceCard) {
         h += '<div class="scard"><div class="sc-head"><div class="sc-title"><span>🧹 开工前历史目录清理确认</span>' + chip("已选 " + S.choiceA + " 全删", "ok") + '</div><div class="sc-sub">检测到旧版遗留 3D 实验目录 proto-3d-legacy/，是否清理后再启动 2D 界面立项？</div></div>';
@@ -1321,8 +1617,9 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
         h += '<div class="sc-body"><div class="gate">';
         h += '<div class="gate-step"><div class="ic run">1</div><div class="gm"><b>Step 1 · 仿 PulseChat 极简高帧率 2D 聊天产品界面设计</b><span>已拉起「设计原型」群（@交互设计 @视觉设计 @原型工程 @设计质疑）· v1.1 待验收</span></div>' + chip("进行中", "ok") + "</div>";
         h += '<div class="gate-step ' + (S.step1Accepted ? "" : "locked") + '"><div class="ic ' + (S.step1Accepted ? "run" : "hold") + '">2</div><div class="gm"><b>Step 2 · Godot 配套 2D 小游戏设计与关卡原型</b><span>' + (S.step1Accepted ? "已解锁并派发 →「Godot项目」群（施工证 MD-0418）" : "🔒 秘书扣留中（Stage-Gated Holding）· 待 Step 1 验收通过后自动立项派发") + '</span></div><button class="btn sm" data-act="held">' + (S.showHeld ? "收起扣留详情" : "查看扣留原文") + "</button></div>";
+        h += contractHtml();
         if (S.showHeld) {
-          h += '<div class="scard" style="margin-top:4px;padding:10px 12px;background:var(--bg-0)"><div class="mono" style="font-size:12px;color:var(--gold)">[秘书加密备忘录 #HOLD-02 · 组员可见性 0 / 5]</div><div style="font-size:12.5px;color:var(--text-2);margin-top:4px">扣留内容：“等 2D 聊天界面验收后，再由「Godot项目」群接手制作配套 2D 像素小游戏”。当前「设计原型」群的 Prompt 与黑板完全不包含任何“游戏/Godot”字样，彻底杜绝注意力稀释与需求串味。</div></div>';
+          h += '<div class="scard" style="margin-top:4px;padding:10px 12px;background:var(--bg-0)"><div class="mono" style="font-size:12px;color:var(--gold)">[秘书加密备忘录 #HOLD-02 · 实现细则组员可见性 0 / 5]</div><div style="font-size:12.5px;color:var(--text-2);margin-top:4px">扣留内容：“等 2D 聊天界面验收后，再由「Godot项目」群接手制作配套 2D 像素小游戏”。「设计原型」群只拿到上面这份只读接口契约（预留挂载点与事件桥签名），Step 2 的玩法、关卡与美术细节一个字都不进群，彻底杜绝注意力稀释与需求串味。</div></div>';
         }
         h += "</div></div></div>";
       }
@@ -1356,7 +1653,7 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
 
       if (m.taskCard) {
         h += '<div class="scard"><div class="sc-head"><div class="sc-title"><span>📋 ' + esc(m.taskCard.id) + "</span>" + chip("Mandate Issued", "accent") + '</div><div class="sc-sub"><b>' + esc(m.taskCard.title) + "</b></div></div>";
-        h += '<div class="sc-body"><div class="mono" style="font-size:12px;color:var(--text-2)">Write-Scope: ' + esc(m.taskCard.scope) + '</div><div style="font-size:12px;color:var(--gold);margin-top:6px">' + esc(m.taskCard.note) + "</div></div></div>";
+        h += '<div class="sc-body"><div class="mono" style="font-size:12px;color:var(--text-2)">Write-Scope: ' + esc(m.taskCard.scope) + '</div><div style="font-size:12px;color:var(--gold);margin-top:6px">' + esc(m.taskCard.note) + "</div>" + (m.taskCard.contract ? contractHtml() : "") + "</div></div>";
       }
 
       if (m.file && FILES[m.file]) {
@@ -1378,11 +1675,11 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
     $("#streamInner").innerHTML = h;
   }
   function renderOrgView() {
-    var h = '<div class="org"><div class="org-top"><div class="info"><h3>🏢 组织架构与 company.json 便携中心 · ' + esc(S.companyName) + '</h3><p>整支虚拟公司（总秘书、部门群、专家人设、模型槽位、分级派活权限）收敛在单个零密钥 <code>company.json</code> 中，支持一键导出、跨宿主导入与自动探测绑定。</p></div>';
+    var h = '<div class="org"><div class="org-top"><div class="info"><h3>🏢 组织架构与 company.json 便携中心 · ' + esc(S.companyName) + '</h3><p>整支虚拟公司（总秘书、部门群、专家人设、模型槽位、分级派活权限）收敛在单个零密钥 <code>company.json</code> 中，支持一键导出、跨宿主导入与自动探测绑定。<br><span style="color:var(--text-3)">本页所有数据与交互均为架构 Demo 演示（静态示例数据）。</span></p></div>';
     h += '<div class="acts"><button class="btn" data-act="json-preview">预览 company.json</button><button class="btn" data-act="json-import">' + IC.up + '<span>导入合并</span></button><button class="btn primary" data-act="json-export">' + IC.dl + '<span>导出 company.json</span></button></div></div>';
 
     h += '<div class="stats">';
-    h += '<div class="stat"><div class="k">常驻员工席位</div><div class="v">' + Object.keys(SEATS).length + '</div><div class="d">含总秘书 + 5 大项目群</div></div>';
+    h += '<div class="stat"><div class="k">常驻员工席位</div><div class="v">' + Object.keys(SEATS).length + '</div><div class="d">含总秘书 + ' + GROUPS.length + " 大项目群</div></div>";
     h += '<div class="stat"><div class="k">平均 KV Cache 命中</div><div class="v" style="color:var(--ok)">92.4%</div><div class="d">前缀字节锁定 + 尾部增量信封</div></div>';
     h += '<div class="stat"><div class="k">阶段闸门泄露率</div><div class="v" style="color:var(--gold)">0.0%</div><div class="d">未解锁阶段组员不可见</div></div>';
     h += '<div class="stat"><div class="k">已绑定宿主</div><div class="v" style="color:var(--accent)">5 / 5</div><div class="d">OpenClaw · DSH · Pi · OpenCode · Hermes</div></div>';
@@ -1393,6 +1690,7 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
     h += '<div class="t-tier"><div class="t-label">Tier 0 · 人类与总调度枢轴</div><div class="t-row">';
     h += '<div class="t-node sec" data-seat="chief-secretary"><span class="em">👩‍💼</span><div class="nm"><b>助手 · 总秘书</b><span>company_all · google/gemini-4-argon</span></div></div>';
     h += '<div class="t-node" data-seat="feedback-collector"><span class="em">👂</span><div class="nm"><b>意见收集员</b><span>report_to_secretary_only · 只读哨兵</span></div></div>';
+    h += '<div class="t-node" data-seat="trend-catcher"><span class="em">📱</span><div class="nm"><b>热点捕手</b><span>report_to_secretary_only · 快慢双路哨兵</span></div></div>';
     h += "</div></div>";
     h += '<div class="t-tier"><div class="t-label">Tier 1 &amp; 2 · 项目群玻璃房（组长拆包 + 组员互助 + 专职挑刺）</div><div class="t-groups">';
     GROUPS.forEach(function (g) {
@@ -1407,12 +1705,35 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
     h += "</div></div></div></div></div>";
 
     h += '<div class="blk"><div class="blk-head"><h4>🛡️ 分级派活权限矩阵（Hierarchical Dispatch Matrix）</h4></div><div class="blk-body" style="padding:0"><table class="mtx"><thead><tr><th>角色层级</th><th>dispatchScope</th><th>可唤醒与派活目标</th><th>文件写入与施工证策略</th></tr></thead><tbody>';
-    h += '<tr><td><b>👩‍💼 总秘书 (Chief Secretary)</b></td><td><code>company_all</code></td><td>全公司所有群组与全体常驻席位</td><td>签发 / 回收施工证（Mandate），扣留多阶段后续步骤</td></tr>';
+    h += '<tr><td><b>👩‍💼 总秘书 (Chief Secretary)</b></td><td><code>company_all</code></td><td>全公司所有群组与全体常驻席位</td><td>签发 / 回收施工证（Mandate），扣留多阶段后续步骤；低风险小改 <code>direct_scoped_write</code> 当场改完，耗时单兵任务 <code>spawn_async_subagent</code> 后台挂起</td></tr>';
     h += '<tr><td><b>🧭 项目群组长 (Group Lead)</b></td><td><code>group_internal</code></td><td>仅限本项目群内部成员拆包与催办</td><td>维护本群任务黑板，协调组内施工证流转</td></tr>';
     h += '<tr><td><b>🔎 专职质疑 / QA (Critic)</b></td><td><code>group_review</code></td><td>本群执行席位（定点打回返工或签发 PASS）</td><td>只读检索 + 运行真实探针，严禁直接代写业务产物</td></tr>';
     h += '<tr><td><b>⚡ 专家执行席位 (Specialist)</b></td><td><code>peer_assist</code></td><td>同群搭档对接口互助，完活汇报组长/秘书</td><td>持有激活态 Mandate 期间解锁对应路径写权限</td></tr>';
     h += '<tr><td><b>👂 意见收集员 (Observer)</b></td><td><code>report_to_secretary_only</code></td><td>仅允许 1v1 私聊总秘书呈交情报简报</td><td>纯只读（read_only_observer），严禁在研发群派活</td></tr>';
+    h += '<tr><td><b>📱 热点捕手 / 竞品哨 (Sentinel)</b></td><td><code>report_to_secretary_only</code></td><td>Fast Path 0 Token 粗筛 + Slow Path 提炼，只私聊总秘书呈报 1/2/3</td><td>只读监听，写入只经记忆底座 <code>memorize</code> 与 <code>dedup_check</code></td></tr>';
     h += "</tbody></table></div></div>";
+
+    h += '<div class="blk" id="govBlk"><div class="blk-head"><h4>🏛️ 项目级三档制度门禁（governanceMode）</h4>' + chip("每个群独立配置", "accent") + '</div><div class="blk-body"><div class="rd-note">strict_pipeline 与 solo_fast 都是 0 Token 跳过评估的硬开关；adaptive 由被唤起者顺手判定三态路由（direct_exec / async_subagent / room_pipeline）。</div><div class="gov-list">';
+    GROUPS.forEach(function (g) {
+      var gm = GOV[g.mode];
+      h += '<div class="gov-item"><div class="gh"><b>' + esc(g.name) + "</b>" + chip(esc(g.mode), gm.v, "mono") + "</div>" + modeSegHtml(g) + '<div class="rd-note">路由：<code>' + esc(gm.route || g.route || "room_pipeline") + "</code> · " + esc(gm.n) + "</div></div>";
+    });
+    h += "</div></div></div>";
+
+    var curMem = MEMS.find(function (x) { return x.id === S.memProvider; }) || MEMS[0];
+    h += '<div class="blk" id="memBlk"><div class="blk-head"><h4>🧠 可插拔记忆底座 · Memory Adapter</h4>' + chip("activeProvider: " + esc(curMem.label), "ok", "mono") + '</div><div class="blk-body"><div class="mem-provs">';
+    MEMS.forEach(function (x) {
+      h += '<button class="prov' + (x.id === S.memProvider ? " on" : "") + '" data-act="mem" data-id="' + esc(x.id) + '" aria-pressed="' + (x.id === S.memProvider) + '" title="' + esc(x.label + " · " + x.mode) + '"><b>' + esc(x.label) + "</b><small>" + esc(x.eco) + "</small><small class=\"mono\">" + esc(x.mode) + "</small></button>";
+    });
+    h += '</div><div class="perm-row">' + MEM_PRIMS.map(function (p) { return chip(esc(p), "violet", "mono"); }).join("") + "</div>";
+    h += '<div class="rd-note">哨兵与员工只调用这 3 个原语，底座可热切换；<code>dedup_check</code> 与立项事务的指纹检查配合，同一条情报不会重复立项。未配置任何驱动时自动回退到零依赖的 <code>sqlite-fts5</code>。' + (curMem.repo ? " 当前驱动仓库：<code>" + esc(curMem.repo) + "</code>" : "") + "</div></div></div>";
+
+    h += '<div class="g2b"><div class="blk" id="sanBlk"><div class="blk-head"><h4>🧼 脱敏导出契约</h4>' + chip("sanitized: true", "ok", "mono") + '</div><div class="blk-body"><div class="san">';
+    [["/Users/alice/work/AgentsxCo", "${WORKSPACE}"], ["sk-live-••••9f2a", "${env:OPENAI_API_KEY}"], ["~/.openclaw/sessions/s-8812.jsonl", "（导出时剥离）"], ["alice@private.mail", "<redacted:email>"]].forEach(function (r) {
+      h += '<div class="san-row"><span class="bad" title="' + esc(r[0]) + '">' + esc(r[0]) + '</span><span class="ar">→</span><span class="good" title="' + esc(r[1]) + '">' + esc(r[1]) + "</span></div>";
+    });
+    h += '</div><div class="rd-note">导出的 company.json 只带人设、槽位与权限，绝对路径、密钥和会话转录一律不出门。</div></div></div>';
+    h += '<div class="blk"><div class="blk-head"><h4>📸 Git 快照与伴生巡检</h4>' + chip("可回滚", "accent") + '</div><div class="blk-body"><div class="envlp">git_snapshot_ref: rev-parse HEAD → 3f9c2e1<br>stash create → 8a41d07（不污染工作区）<br>checkpoint_step: sqlite · step-1/accepted</div><div class="rd-note">ephemeral_task_watchdog：只为后台单兵（如 bg-7f3a）挂伴生巡检，心跳超时自动回收并回报总秘书；direct_exec 不挂巡检。</div></div></div></div>';
 
     h += '<div class="blk"><div class="blk-head"><h4>🔌 五大宿主自动探测与槽位绑定（Harness Adapter Binding）</h4><button class="btn sm" data-act="probe">重新探测宿主环境</button></div><div class="blk-body"><div class="hosts" id="hostList">';
     HOSTS.forEach(function (hs) {
@@ -1485,7 +1806,7 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
       h += '<option value="' + esc(m) + '"' + (s.model === m ? " selected" : "") + ">" + esc(m) + "</option>";
     });
     if (MODELS.indexOf(s.model) === -1) h += '<option value="' + esc(s.model) + '" selected>' + esc(s.model) + "</option>";
-    h += "</select>";
+    h += "</select></div>";
     h += '<div style="font-size:11.5px;color:var(--text-3);margin-top:4px">自动容灾备用链 (Fallback Chain)</div><div class="fb-list">';
     (s.fallbacks || []).forEach(function (fb, idx) {
       h += '<span class="fb-chip"><span>#' + (idx + 1) + " " + esc(fb) + '</span><button data-act="fb-del" data-idx="' + idx + '" aria-label="移除">×</button></span>';
@@ -1493,7 +1814,7 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
     h += "</div>";
     h += '<div class="select-wrap fb-add"><select data-act="fb-add"><option value="">＋ 追加备用模型到 Fallback 链…</option>';
     MODELS.forEach(function (m) { h += '<option value="' + esc(m) + '">+ ' + esc(m) + "</option>"; });
-    h += "</select>";
+    h += "</select></div>";
     h += '<div class="trow"><div class="t-txt"><b>允许单次任务临时覆盖模型</b><span><code>allowTaskModelOverride</code> · 门禁复核时可临时升配</span></div><button class="toggle" role="switch" data-act="t-override" aria-checked="' + (s.allowTaskModelOverride ? "true" : "false") + '"></button></div></div>';
 
     h += '<div class="in-sec"><div class="sh"><span>🛡️ 派活权限范围 · dispatchScope</span>' + (s.lockScope ? chip("只读锁定", "warn") : "") + '</div><div class="seg">';
@@ -1504,12 +1825,23 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
     });
     h += "</div></div>";
 
+    if (s.id === "chief-secretary" || s.scope === "group_internal") {
+      var perms = s.perms || ["direct_scoped_write", "spawn_async_subagent"];
+      h += '<div class="in-sec" id="execSec"><div class="sh"><span>⚡ 直接执行权 · Direct Execution</span>' + chip("adaptive", "accent", "mono") + '</div><div class="perm-row">' + perms.map(function (p, i) { return chip(esc(p), i < 2 ? "ok" : "neutral", "mono"); }).join("") + "</div>";
+      h += '<div class="rd-note">' + (s.id === "chief-secretary" ? "低风险小改当场改完（direct_exec），耗时单兵任务派生后台子代理并返回句柄；跨模块任务才拉群。" : "组长在本群 Write-Scope 内同样可以顺手直改或挂后台单兵，不必事事拆包。") + "</div></div>";
+    }
+
+    h += '<div class="in-sec" id="memSec"><div class="sh"><span>🧠 记忆底座 · Memory Adapter</span>' + chip("可插拔", "violet") + "</div>";
+    h += '<div class="select-wrap"><select data-act="mem-sel" aria-label="记忆底座">' + MEMS.map(function (x) { return '<option value="' + esc(x.id) + '"' + (x.id === S.memProvider ? " selected" : "") + ">" + esc(x.label) + " · " + esc(x.eco) + "</option>"; }).join("") + "</select></div>";
+    h += '<div class="perm-row">' + MEM_PRIMS.map(function (p) { return chip(esc(p), "violet", "mono"); }).join("") + "</div>";
+    h += '<div class="trow"><div class="t-txt"><b>脱敏导出</b><span>绝对路径、密钥与会话转录不进 company.json</span></div>' + chip("sanitized: true", "ok", "mono") + "</div></div>";
+
     var deg = Math.round((s.kvHit / 100) * 360);
     h += '<div class="in-sec"><div class="sh"><span>⚡ 持久会话 KV Cache 监控</span>' + chip("Prefix Locked", "ok", "mono") + '</div><div class="kv-box">';
     h += '<div class="kv-ring" style="--deg:' + deg + 'deg"><span id="kvVal">' + s.kvHit.toFixed(1) + "%</span></div>";
     h += '<div class="kv-meta"><div class="r"><span>稳定前缀 Tokens</span><b>' + esc(s.prefixTokens) + '</b></div><div class="r"><span>本轮尾部信封增量</span><b style="color:var(--accent)">' + esc(s.deltaTokens) + '</b></div><div class="r"><span>施工证 (Mandate)</span><b>' + (s.mandate ? esc(s.mandate.id) : "无 · 只读观察") + "</b></div></div></div>";
     if (s.mandate) {
-      h += '<div style="font-size:11.5px;color:var(--text-2);padding:8px 10px;border-radius:var(--r-sm);background:var(--bg-0);border:1px solid var(--line)">🪪 <b>' + esc(s.mandate.title) + "</b><br><span class=\"mono\" style=\"color:var(--text-3)\">Scope: " + esc(s.mandate.path) + " · " + esc(s.mandate.status) + "</span></div>";
+      h += '<div style="font-size:11.5px;color:var(--text-2);padding:8px 10px;border-radius:var(--r-sm);background:var(--bg-0);border:1px solid var(--line)">🪪 <b>' + esc(s.mandate.title) + "</b><br><span class=\"mono\" style=\"color:var(--text-3)\">Scope: " + esc(s.mandate.path) + " · " + esc(s.mandate.status) + "<br>git_snapshot_ref · checkpoint_step · ephemeral_task_watchdog</span></div>";
     }
     h += "</div></div>";
     $("#inspector").innerHTML = h;
@@ -1527,16 +1859,26 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
     });
     var sec = SEATS["chief-secretary"];
     return {
-      $schema: "https://agentsxco.com/schemas/company.v1.json",
+      $schema: "https://agentsxco.com/schemas/company.v1.1.json",
       companyName: S.companyName,
       exportedAt: new Date().toISOString(),
       chiefSecretary: {
         seatId: sec.id, displayName: sec.name, persona: sec.persona,
         defaultModel: sec.model, fallbackModels: sec.fallbacks,
         inheritGlobalAgentsMd: sec.inheritGlobalAgentsMd, allowTaskModelOverride: sec.allowTaskModelOverride,
-        dispatchScope: sec.scope
+        dispatchScope: sec.scope, permissions: (sec.perms || []).slice()
       },
-      groups: GROUPS.map(function (g) { return { groupId: g.id, name: g.name, topic: g.topic, members: g.members, leadSeatId: g.lead, criticSeatId: g.critic }; }),
+      sanitized: true,
+      exportContract: { stripAbsolutePaths: true, stripSecrets: true, stripSessionTranscripts: true, pathPlaceholder: "${WORKSPACE}" },
+      governance: {
+        defaultMode: "adaptive",
+        routes: ROUTES.map(function (r) { return r.id; }),
+        projectOverrides: GROUPS.reduce(function (o, g) { o[g.id] = g.mode; return o; }, {})
+      },
+      memoryAdapter: { activeProvider: S.memProvider, fallbackProvider: "sqlite-fts5", providers: MEMS.map(function (x) { return x.id; }), primitives: ["recall", "memorize", "dedup_check"] },
+      stageGatePolicy: { holdFutureSteps: true, implementationVisibility: "0/members", readOnlyContract: { mountPoint: "#game-overlay-root", bridge: "window.AgentsxCoBridge.mountScene(config)", passThroughWith: "step-1" } },
+      sentinelPresets: RADAR.map(function (p) { return { presetId: p.id, seatId: p.seat, schedule: p.cron, reportTo: "chief-secretary", targetGroup: p.room }; }),
+      groups: GROUPS.map(function (g) { return { groupId: g.id, name: g.name, topic: g.topic, members: g.members, leadSeatId: g.lead, criticSeatId: g.critic, governanceMode: g.mode }; }),
       employees: emp
     };
   }
@@ -1584,6 +1926,12 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
         updated += 1; _mentionReCache = null;
       }
     });
+    var ov = obj.governance && obj.governance.projectOverrides;
+    if (ov && typeof ov === "object") {
+      GROUPS.forEach(function (g) { if (GOV[ov[g.id]]) g.mode = ov[g.id]; });
+    }
+    var ap = obj.memoryAdapter && obj.memoryAdapter.activeProvider;
+    if (ap && MEMS.some(function (x) { return x.id === ap; })) S.memProvider = ap;
     renderAll();
     toast("已导入 " + S.companyName + "（新增 " + added + " 席位，更新 " + updated + " 席位）");
   }
@@ -1595,15 +1943,17 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
     inp.value = "";
     var room = S.room === "org" ? "dm:chief-secretary" : S.room;
     if (!S.msgs[room]) S.msgs[room] = [];
-    S.msgs[room].push({ id: "u-" + Date.now(), from: "me", time: "14:30", tick: "read", text: txt });
+    var isDp = room === "group:design-prototype";
+    S.msgs[room].push({ id: "u-" + Date.now(), from: "me", time: "14:30", tick: "read", text: txt, seq: isDp ? pigEvent("me", txt) : 0 });
     renderStream();
     setTimeout(function () {
-      var replyFrom = room.indexOf("group:") === 0 ? "ux-lead" : room.replace("dm:", "");
+      var rg = room.indexOf("group:") === 0 ? groupOf(room) : null;
+      var replyFrom = rg ? rg.lead : room.replace("dm:", "");
       if (!SEATS[replyFrom]) replyFrom = "chief-secretary";
-      S.msgs[room].push({
-        id: "r-" + Date.now(), from: replyFrom, time: "14:30",
-        text: "收到！当前进度：Step 1《2D 产品界面设计》v1.1 已通过 @设计质疑 全部 4 项门禁复核，KV Cache 稳定在 92.4%，随时可以验收或解锁下一阶段。"
-      });
+      var rt = rg && !isDp
+        ? "收到，已记入「" + rg.name + "」群黑板，按本群 `" + rg.mode + "` 档位处理。"
+        : "收到！当前进度：Step 1《2D 产品界面设计》v1.1 已通过 @设计质疑 全部 4 项门禁复核，KV Cache 稳定在 92.4%，随时可以验收或解锁下一阶段。";
+      S.msgs[room].push({ id: "r-" + Date.now(), from: replyFrom, time: "14:30", text: rt, seq: isDp ? pigEvent(replyFrom, rt) : 0 });
       renderStream();
       var st = $("#stream");
       if (st) st.scrollTop = st.scrollHeight;
@@ -1660,6 +2010,35 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
       S.choiceA = el.getAttribute("data-k"); renderStream();
     } else if (act === "held") {
       S.showHeld = !S.showHeld; renderStream();
+    } else if (act === "radar") {
+      S.radar = Number(el.getAttribute("data-i")) || 0; renderStream();
+    } else if (act === "topic") {
+      var rp = RADAR[S.radar], tk = Number(el.getAttribute("data-k"));
+      if (S.topicPick[rp.id] || !rp.out[tk - 1]) return;
+      S.topicPick[rp.id] = tk;
+      var tg = groupOf(rp.room), to = rp.out[tk - 1];
+      var how = tg.mode === "solo_fast" ? "本群为 `solo_fast` 档，直接开写" : "已签发施工证 `MD-042" + (S.radar + 1) + "`（`" + tg.mode + "`）";
+      S.msgs["dm:chief-secretary"].push({ id: "m-topic-" + rp.id, from: "chief-secretary", time: "14:31", text: "收到，已把第 " + tk + " 项「" + to[0] + "」派进「" + tg.name + "」群：" + how + "。" });
+      if (!S.msgs[rp.room]) S.msgs[rp.room] = [];
+      var tm = { id: "g-topic-" + rp.id, from: "chief-secretary", time: "14:31", text: "📌 派单 · 第 " + tk + " 项「" + to[0] + "」：" + to[1] + "。" + how + "。" + rp.team + "。" };
+      if (rp.room === "group:design-prototype") tm.seq = pigEvent("chief-secretary", tm.text);
+      S.msgs[rp.room].push(tm);
+      if (S.room !== rp.room) tg.unread = true;
+      renderAll();
+      toast("已派单 → " + tg.name);
+    } else if (act === "gov") {
+      var gg = groupOf(el.getAttribute("data-room")), gmode = el.getAttribute("data-mode");
+      if (!gg || !GOV[gmode] || gg.mode === gmode) return;
+      gg.mode = gmode; renderAll();
+      toast("「" + gg.name + "」切换为 " + gmode + " · " + GOV[gmode].n);
+    } else if (act === "rules-toggle") {
+      S.rulesOpen = !S.rulesOpen; renderStream();
+    } else if (act === "pig-at") {
+      if (el.hasAttribute("disabled")) return;
+      pigWake(el.getAttribute("data-seat"));
+    } else if (act === "mem") {
+      var mid = el.getAttribute("data-id");
+      if (MEMS.some(function (x) { return x.id === mid; })) { S.memProvider = mid; renderAll(); }
     } else if (act === "report") {
       var k = el.getAttribute("data-k");
       S.reportPicked = k;
@@ -1758,6 +2137,8 @@ table.mtx th { background: var(--bg-3); color: var(--text-2); font-weight: 650; 
       el.value = ""; renderInspector();
     } else if (act === "persona") {
       SEATS[S.insp].persona = el.value;
+    } else if (act === "mem-sel") {
+      S.memProvider = el.value; renderAll();
     }
   });
 

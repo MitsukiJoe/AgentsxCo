@@ -1,12 +1,155 @@
 {
-  "$schema": "https://agentsxco.com/schemas/company.v1.json",
+  "$schema": "https://agentsxco.com/schemas/company.v1.1.json",
   "companyName": "Agents x Company Default Studio",
   "domain": "agentsxco.com",
-  "version": "1.0.0",
+  "version": "1.1.0",
+  "governance": {
+    "defaultMode": "adaptive",
+    "availableModes": {
+      "strict_pipeline": {
+        "title": "公司合规·强制全流程档",
+        "skipComplexityEval": true,
+        "requireMandate": true,
+        "requireIndependentCritic": true,
+        "requireSecretaryAcceptance": true,
+        "description": "适用于正式公司仓库与多人合规工程：零 Token 跳过自由评估，哪怕单行修改也强制执行『派单 ➔ 专职质疑挑刺 ➔ 总秘书终审收口』并完整留痕。"
+      },
+      "adaptive": {
+        "title": "智能动态三态路由档",
+        "skipComplexityEval": false,
+        "invokerRoutes": [
+          "direct_exec",
+          "async_subagent",
+          "room_pipeline"
+        ],
+        "description": "由当前被人类唤起的主管（总秘书或项目组长）在单次思考内顺手评估：低风险小改亲自秒做（direct_exec）、独立耗时任务挂后台单兵（async_subagent）、多角色耦合重构推入项目群流水线（room_pipeline）。"
+      },
+      "solo_fast": {
+        "title": "个人脚本·极速直改档",
+        "skipComplexityEval": true,
+        "requireMandate": false,
+        "requireIndependentCritic": false,
+        "description": "适用于个人实验与轻量脚本：默认由被唤起角色直接读写并运行基础校验后交付。"
+      }
+    },
+    "projectOverrides": {
+      "enterprise-core": "strict_pipeline",
+      "pulsechat-proto": "adaptive",
+      "personal-scripts": "solo_fast"
+    }
+  },
+  "memoryAdapter": {
+    "activeProvider": "memory-lancedb-pro",
+    "primitives": [
+      "recall(query, scope)",
+      "memorize(entry, scope)",
+      "dedup_check(fingerprint)"
+    ],
+    "providers": {
+      "memory-lancedb-pro": {
+        "ecosystem": "OpenClaw",
+        "repo": "https://github.com/CortexReach/memory-lancedb-pro",
+        "mode": "hybrid_vector_fts",
+        "scopes": [
+          "role",
+          "room",
+          "company"
+        ]
+      },
+      "reme": {
+        "ecosystem": "DSH / AgentScope",
+        "repo": "https://github.com/agentscope-ai/ReMe",
+        "mode": "structured_experience_memory",
+        "scopes": [
+          "role",
+          "company"
+        ]
+      },
+      "memsearch": {
+        "ecosystem": "DSH / Zilliz",
+        "repo": "https://github.com/zilliztech/memsearch",
+        "mode": "markdown_first_semantic",
+        "scopes": [
+          "role",
+          "room",
+          "company"
+        ]
+      },
+      "sqlite-fts5": {
+        "ecosystem": "Built-in Zero-Dep",
+        "mode": "local_fts5_fallback",
+        "scopes": [
+          "role",
+          "room",
+          "company"
+        ]
+      },
+      "custom-next": {
+        "ecosystem": "Custom Extension Slot",
+        "mode": "pluggable_driver",
+        "scopes": [
+          "role",
+          "room",
+          "company"
+        ]
+      }
+    }
+  },
+  "stageGatePolicy": {
+    "mode": "dependency_aware_holding",
+    "holdFutureImplementation": true,
+    "passThroughReadOnlyContracts": true,
+    "exampleContract": {
+      "contractId": "contract-step2-canvas-mount",
+      "summary": "预留 #game-overlay-root 全屏容器节点与 window.AgentsxCoBridge.mountScene(config) 事件桥接口（严禁在 Step 1 提前编写游戏业务逻辑）"
+    }
+  },
+  "companionWatchdog": {
+    "mode": "ephemeral_task_cron",
+    "spawnOn": [
+      "room_pipeline",
+      "async_subagent"
+    ],
+    "skipOn": [
+      "direct_exec"
+    ],
+    "zeroTokenRules": {
+      "maxIdleSeconds": 180,
+      "maxSameErrorStreak": 3,
+      "maxPeerMentionHops": 6
+    },
+    "handbackCheckpoint": "git_commit_or_stash_sha"
+  },
+  "sentinelPresets": [
+    {
+      "presetId": "dev-issue-triage",
+      "title": "🛠️ 研发反馈哨（Issue / 群聊吐槽聚类）",
+      "seatId": "feedback-collector",
+      "fastPath": "URL / 报错堆栈指纹去重 + 时间窗口合并（零 Token 滤除 75% 重复报错）",
+      "slowPath": "结合 memory-lancedb-pro / ReMe 召回历史已立项记录，提炼未覆盖的高价值产品痛点私聊呈报总秘书",
+      "secretaryOutput": "源意见出处 + 秘书完善建议 + 1/2/3 可执行修复方案选项"
+    },
+    {
+      "presetId": "media-trend-catcher",
+      "title": "📱 自媒体热点捕手（多平台热榜 / 爆款选题雷达）",
+      "seatId": "trend-catcher",
+      "fastPath": "正则滤除营销软文、带货广告与 24h 前旧闻（零 Token 筛除 80% 噪音）",
+      "slowPath": "结合记忆库比对往期已发选题防撞车，提炼核心情绪钩子、争议切入点与受众痛点私聊呈报总秘书/主编",
+      "secretaryOutput": "热点源与情绪爆点 + 账号人设契合度评估 + 1/2/3 爆款选题大纲与分镜派单选项"
+    },
+    {
+      "presetId": "competitor-radar",
+      "title": "📈 竞品与舆情盯盘哨（Changelog / 定价异动雷达）",
+      "seatId": "feedback-collector",
+      "fastPath": "DOM / Markdown Diff 哈希比对与关键价格/API 词条异动触发",
+      "slowPath": "对比记忆库中的竞品历史台账，评估对本项目的实质影响与应对窗口",
+      "secretaryOutput": "异动事实摘要 + 核心影响面分析 + 1/2/3 产品应对策略选项"
+    }
+  ],
   "chiefSecretary": {
     "seatId": "chief-secretary",
     "displayName": "助手 (总秘书)",
-    "persona": "冷静干练、条理极强的首席幕僚。擅长将老板的一句话需求扩充为可执行规范，严格执行『分步闸门扣留（做完第一步再放第二步）』，对意见收集员的情报做二次价值过滤并附带 A/B/C 可选方案上报，对各项目群产出做最终收口把关。",
+    "persona": "冷静干练、条理极强的首席幕僚。支持『项目三档门禁 + 唤起者三态路由』：在 solo_fast 或 adaptive 低风险任务下可直接动笔秒改（direct_write_low_risk）；在复杂多阶段任务下严格执行『实施扣留 × 契约透传（做完第一步再放第二步，但提前共享只读接口契约）』；对收集员/热点捕手的情报借助记忆库做二次价值过滤并附带 1/2/3 可选方案上报，对各项目群产出做最终收口把关。",
     "defaultModel": "openai/gpt-6.1-sol",
     "fallbackModels": [
       "anthropic/claude-opus-5-5",
@@ -18,8 +161,11 @@
     "dispatchScope": "company_all",
     "permissions": [
       "read",
+      "direct_scoped_write",
+      "spawn_async_subagent",
       "dispatch_all",
       "stage_gate_hold",
+      "contract_pass_through",
       "final_acceptance"
     ]
   },
@@ -27,8 +173,9 @@
     {
       "roomId": "design-prototype",
       "title": "设计原型",
-      "interactionStyle": "hybrid",
-      "worktreeStrategy": "shared_single_writer",
+      "governanceMode": "adaptive",
+      "interactionStyle": "explicit_mention_cursor_piggyback",
+      "worktreeStrategy": "git_worktree_mandate_lock",
       "members": [
         "ia-designer",
         "visual-designer",
@@ -38,11 +185,13 @@
     },
     {
       "roomId": "issue-triage",
-      "title": "Issue分诊台",
-      "interactionStyle": "mention_driven",
-      "worktreeStrategy": "shared_single_writer",
+      "title": "情报与热点哨所",
+      "governanceMode": "adaptive",
+      "interactionStyle": "fast_slow_funnel",
+      "worktreeStrategy": "read_only_observer",
       "members": [
         "feedback-collector",
+        "trend-catcher",
         "design-critic"
       ]
     }
@@ -52,7 +201,7 @@
       "seatId": "ia-designer",
       "department": "原型设计师",
       "displayName": "交互设计",
-      "persona": "专注页面树、路由状态表（空态/加载/失败/离线/键盘弹起态）与异常点击路径设计，输出高密度结构化 Markdown 规范。",
+      "persona": "专注页面树、路由状态表（空态/加载/失败/离线/键盘弹起态）、跨阶段只读接口契约对齐与异常点击路径设计，输出高密度结构化 Markdown 规范。",
       "defaultModel": "openai/gpt-6.1-sol",
       "fallbackModels": [
         "deepseek/deepseek-v4-flash"
@@ -92,7 +241,7 @@
       "seatId": "proto-engineer",
       "department": "原型设计师",
       "displayName": "原型工程",
-      "persona": "全栈原型实现工程师，依据交互与视觉规范编写可本地点通的 HTML/CSS/JS 双端 Demo 并带模拟状态调试面板。",
+      "persona": "全栈原型实现工程师，持 Mandate 施工证（绑定 Git Commit/Stash 游标）编写可本地点通的 HTML/CSS/JS 双端 Demo 并预留跨阶段契约挂载点。",
       "defaultModel": "openai/gpt-6.1-sol",
       "fallbackModels": [
         "xai/grok-4.7"
@@ -132,7 +281,7 @@
       "seatId": "feedback-collector",
       "department": "情报哨所",
       "displayName": "意见收集员",
-      "persona": "纯只读情报分析员。静默监听群聊与外部反馈，甄别真正有价值的产品痛点，整理结构化摘要私聊上报给总秘书。",
+      "persona": "纯只读研发情报哨兵。通过 Fast Path 规则滤除重复报错，结合可插拔记忆库（memory-lancedb-pro / ReMe / MemSearch）甄别真正未立项的产品痛点，私聊上报给总秘书。",
       "defaultModel": "deepseek/deepseek-v4-flash",
       "fallbackModels": [
         "deepseek/deepseek-flash"
@@ -140,6 +289,25 @@
       "thinking": "high",
       "inheritGlobalAgentsMd": false,
       "roleRulesPath": "rules/feedback-collector.md",
+      "allowTaskModelOverride": true,
+      "dispatchScope": "report_to_secretary_only",
+      "permissions": [
+        "read_only_observer",
+        "dm_secretary"
+      ]
+    },
+    {
+      "seatId": "trend-catcher",
+      "department": "情报哨所",
+      "displayName": "热点捕手",
+      "persona": "纯只读自媒体与行业热点哨兵。通过 Fast Path 规则筛除营销软文与过时旧闻，结合记忆库比对往期选题，提炼高传播潜力的情绪钩子、争议视角与选题切入点，私聊呈报总秘书/主编生成 1/2/3 选题方案。",
+      "defaultModel": "deepseek/deepseek-v4-flash",
+      "fallbackModels": [
+        "deepseek/deepseek-flash"
+      ],
+      "thinking": "high",
+      "inheritGlobalAgentsMd": false,
+      "roleRulesPath": "rules/trend-catcher.md",
       "allowTaskModelOverride": true,
       "dispatchScope": "report_to_secretary_only",
       "permissions": [
